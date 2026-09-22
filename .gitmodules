@@ -1,15 +1,15 @@
 [submodule "lunar"]
-	path = lunar
+	path = vendors/lunar
 	url = https://github.com/kindtracker/lunar.git
 [submodule "lua"]
-	path = lua
+	path = vendors/lua
 	url = https://github.com/lua/lua.git
 [submodule "luafilesystem"]
-	path = luafilesystem
+	path = vendors/luafilesystem
 	url = https://github.com/lunarmodules/luafilesystem.git
 [submodule "socket"]
-	path = luasocket
+	path = vendors/luasocket
 	url = https://github.com/luapower/socket.git
 [submodule "luamimetypes"]
-	path = luamimetypes
+	path = vendors/luamimetypes
 	url = https://github.com/lunarmodules/lua-mimetypes.git

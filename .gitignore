@@ -1,5 +1,6 @@
-web/goose.js
-web/goose.wasm
+web/goosel/wgoose.js
+web/goosel/wgoose.wasm
+web/goosel/vendors
 web/lunar
 web/luasocket
 web/luamimetypes

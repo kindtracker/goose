@@ -81,7 +81,7 @@ window.Module = {
       if (Directory) {
         FS.mkdirTree(LuaPackagesPath + Directory);
       }
-      const FileContent = await GetContent("/" + WebFilePath, true);
+      const FileContent = await GetContent("/goosel/vendors/" + WebFilePath, true);
       FS.writeFile(LuaPackagesPath + InstallFilePath, FileContent);
     }
 
