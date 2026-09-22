@@ -1,4 +1,5 @@
-const LunarTree = `lunar/vendors/url.lua
+const LuaPackagesPath = "/usr/local/share/lua/5.5/";
+const PackagesToInstallTree = `lunar/vendors/url.lua
 lunar/vendors/json.lua
 lunar/vendors/pegasus/compress.lua
 lunar/vendors/pegasus/log.lua
@@ -38,7 +39,18 @@ lunar/src/services/http-shared.lua
 lunar/src/services/random.lua
 lunar/src/core/service.lua
 lunar/src/core/instance.lua
-lunar/src/init.lua`;
+lunar/src/init.lua
+luasocket/url.lua
+luasocket/smtp.lua
+luasocket/ftp.lua
+luasocket/http.lua
+luasocket/mbox.lua
+luasocket/tftp.lua
+luasocket/tp.lua
+luasocket/headers.lua
+uluasocket/ltn12.lua
+uluasocket/socket.lua
+uluasocket/mime.lua`;
 
 async function GetContent(Url, Text) {
   const Response = await fetch(Url);
@@ -54,16 +66,18 @@ window.Module = {
       FS.writeFile("/" + FilePath, FileContent);
     }
 
-    const LuaPackagesPath = "/usr/local/share/lua/5.5/";
+    for (const FilePath of PackagesToInstallTree.split("\n")) {
+      const WebFilePath = FilePath.replace("uluasocket", "luasocket");
+      console.log("[Goose] Loading:", WebFilePath);
 
-    for (const FilePath of LunarTree.split("\n")) {
-      console.log("[Goose] Loading:", FilePath);
-      const Directory = FilePath.substring(0, FilePath.lastIndexOf("/"));
+      const InstallFilePath = FilePath.replace("luasocket", "socket")
+        .replace("usocket/", "");
+      const Directory = InstallFilePath.substring(0, InstallFilePath.lastIndexOf("/"));
       if (Directory) {
         FS.mkdirTree(LuaPackagesPath + Directory);
       }
-      const FileContent = await GetContent("/" + FilePath, true);
-      FS.writeFile(LuaPackagesPath + FilePath, FileContent);
+      const FileContent = await GetContent("/" + WebFilePath, true);
+      FS.writeFile(LuaPackagesPath + InstallFilePath, FileContent);
     }
 
     console.log("[Goose] Initialized");
