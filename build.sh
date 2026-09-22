@@ -45,4 +45,5 @@ find goose -name "*.c" |
 echo "  LD  web/goose.js"
 emcc $CFlags build/lua/*.o build/goose/*.o \
   -Ilua \
+  -sEXPORTED_FUNCTIONS=_Main \
   -o web/goose.js
