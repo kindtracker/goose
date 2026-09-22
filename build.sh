@@ -47,3 +47,6 @@ emcc $CFlags build/lua/*.o build/goose/*.o \
   -Ilua \
   -sEXPORTED_FUNCTIONS=_Main \
   -o web/goose.js
+
+rm -rf web/lunar
+cp -r lunar/package web/lunar
