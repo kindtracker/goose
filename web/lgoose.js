@@ -40,6 +40,10 @@ lunar/src/services/random.lua
 lunar/src/core/service.lua
 lunar/src/core/instance.lua
 lunar/src/init.lua
+luamimetypes/mimetypes.lua
+luamimetypes/mimetypes/extensions.lua
+luamimetypes/mimetypes/filenames.lua
+luamimetypes/mimetypes/generated.lua
 luasocket/url.lua
 luasocket/smtp.lua
 luasocket/ftp.lua
@@ -68,10 +72,11 @@ window.Module = {
 
     for (const FilePath of PackagesToInstallTree.split("\n")) {
       const WebFilePath = FilePath.replace("uluasocket", "luasocket");
+      const InstallFilePath = FilePath.replace("luasocket", "socket")
+        .replace("usocket/", "")
+        .replace("luamimetypes/", "");
       console.log("[Goose] Loading:", WebFilePath);
 
-      const InstallFilePath = FilePath.replace("luasocket", "socket")
-        .replace("usocket/", "");
       const Directory = InstallFilePath.substring(0, InstallFilePath.lastIndexOf("/"));
       if (Directory) {
         FS.mkdirTree(LuaPackagesPath + Directory);

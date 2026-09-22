@@ -15,7 +15,7 @@ int Main() {
   luaL_requiref(L, "lfs", luaopen_lfs, 1);
   lua_pop(L, 1);
 
-  luaL_requiref(L, "socket", luaopen_socket_core, 1);
+  luaL_requiref(L, "socket.core", luaopen_socket_core, 1);
   lua_pop(L, 1);
 
   luaL_requiref(L, "mime.core", luaopen_mime_core, 1);
@@ -26,7 +26,10 @@ int Main() {
   const char *Path = lua_tostring(L, -1);
   lua_pop(L, 1);
 
-  lua_pushfstring(L, "%s;/usr/local/share/lua/5.5/lunar/vendors/?.lua", Path);
+  lua_pushfstring(L,
+                  "%s;/usr/local/share/lua/5.5/lunar/vendors/?.lua;/usr/local/"
+                  "share/lua/5.5/lunar/vendors/?/init.lua",
+                  Path);
   lua_setfield(L, -2, "path");
   lua_pop(L, 1);
 

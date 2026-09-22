@@ -88,3 +88,4 @@ rm -rf web/lunar
 cp -r lunar/package web/lunar
 cp -r luasocket/socket web/luasocket
 cp luasocket/*.lua web/luasocket
+cp -r luamimetypes web/luamimetypes

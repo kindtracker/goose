@@ -10,3 +10,6 @@
 [submodule "socket"]
 	path = luasocket
 	url = https://github.com/luapower/socket.git
+[submodule "luamimetypes"]
+	path = luamimetypes
+	url = https://github.com/lunarmodules/lua-mimetypes.git
