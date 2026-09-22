@@ -1,0 +1,6 @@
+[submodule "lunar"]
+	path = lunar
+	url = https://github.com/kindtracker/lunar.git
+[submodule "lua"]
+	path = lua
+	url = https://github.com/lua/lua.git
