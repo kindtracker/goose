@@ -5,3 +5,6 @@ instance.Name = "Hello"
 for key, value in pairs(instance) do
 	print(key .. ": " .. tostring(value))
 end
+
+print(Goose.Page)
+print(Goose.Page:SetTitle("d"))

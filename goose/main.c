@@ -8,35 +8,39 @@
 #include "luasocket.h"
 #include "mime.h"
 
+#include "goose.h"
+
 int Main() {
-  lua_State *L = luaL_newstate();
-  luaL_openlibs(L);
+  lua_State *Lua = luaL_newstate();
+  luaL_openlibs(Lua);
 
-  luaL_requiref(L, "lfs", luaopen_lfs, 1);
-  lua_pop(L, 1);
+  luaL_requiref(Lua, "lfs", luaopen_lfs, 1);
+  lua_pop(Lua, 1);
 
-  luaL_requiref(L, "socket.core", luaopen_socket_core, 1);
-  lua_pop(L, 1);
+  luaL_requiref(Lua, "socket.core", luaopen_socket_core, 1);
+  lua_pop(Lua, 1);
 
-  luaL_requiref(L, "mime.core", luaopen_mime_core, 1);
-  lua_pop(L, 1);
+  luaL_requiref(Lua, "mime.core", luaopen_mime_core, 1);
+  lua_pop(Lua, 1);
 
-  lua_getglobal(L, "package");
-  lua_getfield(L, -1, "path");
-  const char *Path = lua_tostring(L, -1);
-  lua_pop(L, 1);
+  lua_getglobal(Lua, "package");
+  lua_getfield(Lua, -1, "path");
+  const char *Path = lua_tostring(Lua, -1);
+  lua_pop(Lua, 1);
 
-  lua_pushfstring(L,
+  lua_pushfstring(Lua,
                   "%s;/usr/local/share/lua/5.5/lunar/vendors/?.lua;/usr/local/"
                   "share/lua/5.5/lunar/vendors/?/init.lua",
                   Path);
-  lua_setfield(L, -2, "path");
-  lua_pop(L, 1);
+  lua_setfield(Lua, -2, "path");
+  lua_pop(Lua, 1);
 
-  if (luaL_dofile(L, "main.lua") != LUA_OK) {
-    printf("[Goose] Lua error: %s\n", lua_tostring(L, -1));
+  GooseLuaGlobal(Lua);
+
+  if (luaL_dofile(Lua, "main.lua") != LUA_OK) {
+    printf("[Goose] Lua error: %s\n", lua_tostring(Lua, -1));
   }
 
-  lua_close(L);
+  lua_close(Lua);
   return 0;
 }
