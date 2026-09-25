@@ -60,6 +60,9 @@ export -f CompileLuaSocket
 export -f CompileGoose
 export CFlags
 
+find goose -name "*.c" |
+  xargs -P "$Jobs" -n 1 bash -c 'CompileGoose "$1"' _
+
 find vendors/lua -name "*.c" \
   ! -name "onelua.c" \
   ! -name "lua.c" \
@@ -73,9 +76,6 @@ find vendors/luasocket -name "*.c" \
   ! -name "wsocket.c" \
   ! -name "serial.c" |
   xargs -P "$Jobs" -n 1 bash -c 'CompileLuaSocket "$1"' _
-
-find goose -name "*.c" |
-  xargs -P "$Jobs" -n 1 bash -c 'CompileGoose "$1"' _
 
 echo "  LD  web/goosel/wgoose.js"
 emcc $CFlags \
