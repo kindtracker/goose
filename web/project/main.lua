@@ -1,10 +1,6 @@
 local Lunar = require("lunar")
-local instance = Instance.new()
-instance.Name = "Hello"
+local Page = Goose.Page
 
-for key, value in pairs(instance) do
-	print(key .. ": " .. tostring(value))
-end
-
-print(Goose.Page)
-print(Goose.Page:SetTitle("d"))
+local Function = Goose:LoadString("console.log('hellloo!!')")
+print(Function)
+Function()
