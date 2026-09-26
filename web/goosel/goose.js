@@ -64,14 +64,26 @@ async function GetContent(Url, Text) {
   return Text ? await Response.text() : await Response.json();
 }
 
+let LoadingInterval = null;
+
+window.addEventListener("GooseLuaLoaded", () => {
+  clearInterval(LoadingInterval);
+});
+
 window.Module = {
   onRuntimeInitialized: async () => {
+    const LoadingCharacters = "/-\\|";
+    let LoadingIndex = 0;
+    LoadingInterval = setInterval(() => {
+      document.title = `Goose - Loading Lua ${LoadingCharacters[LoadingIndex % LoadingCharacters.length]}`;
+      LoadingIndex++;
+    }, 150);
+
     const Config = await GetContent("/project/config.json");
     for (const FilePath of Config.Files) {
       const FileContent = await GetContent("/project/" + FilePath, true);
       FS.writeFile("/" + FilePath, FileContent);
     }
-
 
     FS.mkdirTree("/gooselib");
     for (const FilePath of PackagesToInstallTree.split("\n")) {
