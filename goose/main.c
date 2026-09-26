@@ -37,8 +37,14 @@ int Main() {
 
   GooseLuaGlobal(Lua);
 
+  if (luaL_dofile(Lua, "/gooselib/goose.lua") != LUA_OK) {
+    printf("[Goose] Lua error: %s\n", lua_tostring(Lua, -1));
+    return 1;
+  }
+
   if (luaL_dofile(Lua, "main.lua") != LUA_OK) {
     printf("[Goose] Lua error: %s\n", lua_tostring(Lua, -1));
+    return 1;
   }
 
   lua_close(Lua);

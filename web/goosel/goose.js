@@ -54,7 +54,9 @@ luasocket/tp.lua
 luasocket/headers.lua
 uluasocket/ltn12.lua
 uluasocket/socket.lua
-uluasocket/mime.lua`;
+uluasocket/mime.lua
+gooselib/goose.lua
+gooselib/page.lua`;
 
 async function GetContent(Url, Text) {
   const Response = await fetch(Url);
@@ -70,6 +72,8 @@ window.Module = {
       FS.writeFile("/" + FilePath, FileContent);
     }
 
+
+    FS.mkdirTree("/gooselib");
     for (const FilePath of PackagesToInstallTree.split("\n")) {
       const WebFilePath = FilePath.replace("uluasocket", "luasocket");
       const InstallFilePath = FilePath.replace("luasocket", "socket")
@@ -81,8 +85,11 @@ window.Module = {
       if (Directory) {
         FS.mkdirTree(LuaPackagesPath + Directory);
       }
-      const FileContent = await GetContent("/goosel/vendors/" + WebFilePath, true);
-      FS.writeFile(LuaPackagesPath + InstallFilePath, FileContent);
+ 
+      const IsGooseLib = WebFilePath.includes("gooselib");
+      const FileContent = await GetContent((IsGooseLib ? "/goosel/" :  "/goosel/vendors/") + WebFilePath, true);
+      console.log(IsGooseLib ? "/" + InstallFilePath : LuaPackagesPath + InstallFilePath)
+      FS.writeFile(IsGooseLib ? "/" + InstallFilePath : LuaPackagesPath + InstallFilePath, FileContent);
     }
 
     console.log("[Goose] Initialized");
