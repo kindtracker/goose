@@ -2,6 +2,7 @@
 set -e
 
 CFlags="-O0"
+LDFlags="-sWASM=0"
 Jobs="$(nproc)"
 
 rm -rf build
@@ -78,7 +79,7 @@ find vendors/luasocket -name "*.c" \
   xargs -P "$Jobs" -n 1 bash -c 'CompileLuaSocket "$1"' _
 
 echo "  LD  web/goosel/wgoose.js"
-emcc $CFlags \
+emcc $CFlags $LDFlags \
   build/lua/*.o build/goose/*.o \
   build/luasocket/*.o \
   build/luafilesystem/*.o \

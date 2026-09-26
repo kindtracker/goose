@@ -5,8 +5,10 @@
 
 #include "goose.h"
 
-EM_JS(int, GooseCompileJavaScript, (const char *String), {
+EM_JS(int, GooseCompileJavaScript, (char *String), {
+  String = UTF8ToString(String);
   const CompFunction = new Function(String);
+
   if (!Module.GooseFunctions) {
     Module.GooseFunctions = new Map();
   }
@@ -19,9 +21,7 @@ EM_JS(int, GooseCompileJavaScript, (const char *String), {
 
 EM_JS(char *, GooseCallJavaScript, (int Id), {
   const CompFunction = Module.GooseFunctions.get(Id);
-  console.log(CompFunction, CompFunction());
   const ReturnString = String(CompFunction());
-  console.log("test");
 
   const Length = lengthBytesUTF8(ReturnString) + 1;
   const Pointer = _malloc(Length);
@@ -36,7 +36,7 @@ int GooseLoadStringCall(lua_State *Lua) {
   char *ReturnString = GooseCallJavaScript(*Id);
   lua_pushstring(Lua, ReturnString);
 
-  return 0;
+  return 1;
 }
 
 int GooseLoadString(lua_State *Lua) {
