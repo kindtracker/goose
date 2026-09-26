@@ -1,4 +1,4 @@
 local Lunar = require("lunar")
 local Page = Goose.Page
 
-Page:SetTitle("Test")
+Page:SetTitle("Goose - Lua Loaded")
