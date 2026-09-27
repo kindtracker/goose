@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-CFlags="-O0"
-LDFlags="-sWASM=0"
+CFlags="-O3"
+LDFlags="-sWASM=2"
 Jobs="$(nproc)"
 
 rm -rf build
@@ -86,4 +86,4 @@ emcc $CFlags $LDFlags \
   -sEXPORTED_FUNCTIONS=_Main \
   -o web/goosel/wgoose.js
 
-./copy.sh
+lua build.lua
