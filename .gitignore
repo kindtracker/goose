@@ -1,5 +1,7 @@
 web/goosel/wgoose.js
 web/goosel/wgoose.wasm
+web/goosel/wgoose.wasm.js
+web/goosel/packages.js
 web/goosel/vendors
 web/lunar
 web/luasocket
