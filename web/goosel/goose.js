@@ -57,7 +57,8 @@ uluasocket/socket.lua
 uluasocket/mime.lua
 gooselib/goose.lua
 gooselib/page.lua
-gooselib/htmlelem.lua`;
+gooselib/htmlelem.lua
+gooselib/style.lua`;
 
 async function GetContent(Url, Text) {
   const Response = await fetch(Url);

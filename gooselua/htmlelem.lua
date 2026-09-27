@@ -89,10 +89,6 @@ local LuaToJavascriptElementTable = {
 	NextElementSibling = "nextElementSibling",
 }
 
-local LuaToJavascriptStyleTable = {
-	Style = "style",
-}
-
 function Module.new()
 	local self = {}
 
@@ -195,6 +191,18 @@ function Module.new()
         const Element = GetElement("%s")
         const Parent = GetElement("%s")
         Parent.appendChild(Element)
+      ]],
+				GetElementJavascriptFunction,
+				Instance.UniqueId,
+				NewValue.UniqueId
+			))()
+		elseif Key == "Style" then
+			Goose:LoadString(string.format(
+				[[
+        %s
+        const Element = GetElement("%s")
+        const Style = GetElement("%s")
+        Element.style.cssText = Style.cssText
       ]],
 				GetElementJavascriptFunction,
 				Instance.UniqueId,
