@@ -18,8 +18,17 @@ function Module.new()
 
 	self.__newindex = function(Instance, Key, NewValue)
 		if Key == "InnerHtml" then
+			Goose:LoadString(string.format(
+				[[
+        %s
+        const Element = GetElement("%s")
+        Element.innerHTML = "%s"
+      ]],
+				GetElementJavascriptFunction,
+				Instance.UniqueId,
+				NewValue
+			))()
 		elseif Key == "Parent" then
-			print(NewValue)
 			Goose:LoadString(string.format(
 				[[
         %s
