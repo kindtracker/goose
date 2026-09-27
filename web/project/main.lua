@@ -1,10 +1,6 @@
 local Lunar = require("lunar")
 local Page = Goose.Page
 
-Page:SetTitle("Goose - Lua Loaded")
+Page:SetTitle("Goose")
 
-local Div = Page.new("div")
-Div.InnerHtml = "hiiiiiii"
-Div.Parent = Page.Body
-
-print(Div.InnerHtml)
+Page.Body.Style.BackgroundImage = 'url(\\"https://melonking.net/images/flood-water-solid.png\\")'
