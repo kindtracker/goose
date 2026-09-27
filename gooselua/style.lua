@@ -12,9 +12,9 @@ function GetElement(UniqueId) {
 
 function StyleModule.new()
 	local self = {}
-	self.StyleLoaded = false
+	self.__Internal__StyleLoaded = false
 
-	self.StyleLoad = function(Instance)
+	self.__Internal__StyleLoad = function(Instance)
 		Goose:LoadString(string.format(
 			[[
       if (!Module.GooseElements) {
@@ -27,8 +27,8 @@ function StyleModule.new()
 	end
 
 	self.__index = function(Instance, Key)
-		if not self.StyleLoaded then
-			self.StyleLoad(Instance)
+		if not self.__Internal__StyleLoaded then
+			self.__Internal__StyleLoad(Instance)
 		end
 
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
@@ -48,8 +48,8 @@ function StyleModule.new()
 	end
 
 	self.__newindex = function(Instance, Key, NewValue)
-		if not self.StyleLoaded then
-			self.StyleLoad(Instance)
+		if not self.__Internal__StyleLoaded then
+			self.__Internal__StyleLoad(Instance)
 		end
 
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
