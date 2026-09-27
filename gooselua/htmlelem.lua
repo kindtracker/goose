@@ -5,7 +5,7 @@ local Module = {}
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
   const Element = Module.GooseElements.get(UniqueId)
-  if (Element.tagName == "BODY") {
+  if (Element?.tagName == "BODY") {
     return document.body
   }
   return Element
@@ -135,10 +135,6 @@ function Module.new()
 				)
 			)()
 
-			if Value == "" then
-				return nil
-			end
-
 			return HtmlElement
 		end
 	end
@@ -184,6 +180,18 @@ function Module.new()
 				Instance.UniqueId,
 				NewValue
 			))()
+
+			Instance.Style = Instance.Style or Lunar.Instance.new("HtmlStyle")
+			Goose:LoadString(string.format(
+				[[
+        %s
+        const Element = GetElement("%s")
+        Module.GooseElements.set("%s", Element.style)
+      ]],
+				GetElementJavascriptFunction,
+				Instance.UniqueId,
+				Instance.Style.UniqueId
+			))()
 		elseif Key == "Parent" then
 			Goose:LoadString(string.format(
 				[[
@@ -191,18 +199,6 @@ function Module.new()
         const Element = GetElement("%s")
         const Parent = GetElement("%s")
         Parent.appendChild(Element)
-      ]],
-				GetElementJavascriptFunction,
-				Instance.UniqueId,
-				NewValue.UniqueId
-			))()
-		elseif Key == "Style" then
-			Goose:LoadString(string.format(
-				[[
-        %s
-        const Element = GetElement("%s")
-        const Style = GetElement("%s")
-        Element.style.cssText = Style.cssText
       ]],
 				GetElementJavascriptFunction,
 				Instance.UniqueId,
