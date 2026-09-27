@@ -12,8 +12,8 @@ function GetElement(UniqueId) {
 ]]
 
 local LuaToJavascriptStringTable = {
-	InnerHTML = "innerHTML",
-	OuterHTML = "outerHTML",
+	InnerHtml = "innerHTML",
+	OuterHtml = "outerHTML",
 	TextContent = "textContent",
 	InnerText = "innerText",
 
@@ -81,12 +81,11 @@ local LuaToJavascriptBooleanTable = {
 local LuaToJavascriptElementTable = {
 	Parent = "parentElement",
 	ParentElement = "parentElement",
+	OffsetParent = "offsetParent",
 	FirstElementChild = "firstElementChild",
 	LastElementChild = "lastElementChild",
 	PreviousElementSibling = "previousElementSibling",
 	NextElementSibling = "nextElementSibling",
-
-	OffsetParent = "offsetParent",
 }
 
 local LuaToJavascriptStyleTable = {
@@ -99,11 +98,6 @@ function Module.new()
 	self.__index = function(_, Key) end
 
 	self.__newindex = function(Instance, Key, NewValue)
-		local LuaToJavascriptTable = {
-			InnerHTML = "innerHTML",
-			OuterHTML = "outerHTML",
-			Language = "lang",
-		}
 		if LuaToJavascriptStringTable[Key] then
 			Goose:LoadString(string.format(
 				[[
@@ -143,6 +137,18 @@ function Module.new()
       ]],
 				Instance.UniqueId,
 				NewValue
+			))()
+		elseif Key == "Parent" then
+			Goose:LoadString(string.format(
+				[[
+        %s
+        const Element = GetElement("%s")
+        const Parent = GetElement("%s")
+        Parent.appendChild(Element)
+      ]],
+				GetElementJavascriptFunction,
+				Instance.UniqueId,
+				NewValue.UniqueId
 			))()
 		end
 	end
