@@ -3,6 +3,7 @@ local PluginService = Lunar:GetService("PluginService")
 local Base = "/gooselib"
 
 PluginService:LoadLuaPlugin("CoreGoosePage", Base .. "/page.lua")
+PluginService:LoadLuaPlugin("CoreGooseHtmlElement", Base .. "/htmlelem.lua")
 
 Goose:LoadString([[
   dispatchEvent(new Event("GooseLuaLoaded"))
