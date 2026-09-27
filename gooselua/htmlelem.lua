@@ -1,4 +1,5 @@
 local Lunar = require("lunar")
+local JSONService = Lunar:GetService("JSONService")
 local Module = {}
 
 local GetElementJavascriptFunction = [[
@@ -95,7 +96,56 @@ local LuaToJavascriptStyleTable = {
 function Module.new()
 	local self = {}
 
-	self.__index = function(_, Key) end
+	self.__index = function(Instance, Key)
+		local JavascriptKey = LuaToJavascriptStringTable[Key]
+			or LuaToJavascriptNumberTable[Key]
+			or LuaToJavascriptBooleanTable[Key]
+		if JavascriptKey then
+			local Value = Goose:LoadString(string.format(
+				[[
+          %s
+          const Element = GetElement("%s")
+          return JSON.stringify(Element.%s)
+      ]],
+				GetElementJavascriptFunction,
+				Instance.UniqueId,
+				JavascriptKey
+			))()
+
+			return JSONService:Decode(Value)
+		end
+
+		if LuaToJavascriptElementTable[Key] then
+			local HtmlElement = Lunar.Instance.new("HtmlElement")
+
+			local Value = Goose:LoadString(
+				string.format(
+					[[
+          %s
+          const Element = GetElement("%s")
+          const Child = Element.%s
+
+          if (!Child) {
+            return ""
+          }
+
+          Module.GooseElements.set("%s", Child)
+          return "Ok"
+      ]],
+					GetElementJavascriptFunction,
+					Instance.UniqueId,
+					LuaToJavascriptElementTable[Key],
+					HtmlElement.UniqueId
+				)
+			)()
+
+			if Value == "" then
+				return nil
+			end
+
+			return HtmlElement
+		end
+	end
 
 	self.__newindex = function(Instance, Key, NewValue)
 		if LuaToJavascriptStringTable[Key] then
