@@ -13,6 +13,10 @@ function PagePlugin:SetTitle(Title)
 end
 
 function PagePlugin:InitPlugin()
+	local BodyElement = Instance.new("HtmlElement")
+	BodyElement.TagName = "Body"
+	PagePlugin.Body = BodyElement
+
 	Goose.Page = PagePlugin
 end
 
