@@ -2,6 +2,10 @@ local Lunar = require("lunar")
 local JSONService = Lunar:GetService("JSONService")
 local Module = {}
 
+local function EscapeString(String)
+	return String:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t")
+end
+
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
   const Element = Module.GooseElements.get(UniqueId)
@@ -240,17 +244,19 @@ function Module.new()
 
 	self.__newindex = function(Instance, Key, NewValue)
 		if LuaToJavascriptStringTable[Key] then
-			Goose:LoadString(string.format(
-				[[
+			Goose:LoadString(
+				string.format(
+					[[
         %s
         const Element = GetElement("%s")
         Element.%s = "%s"
       ]],
-				GetElementJavascriptFunction,
-				Instance.UniqueId,
-				LuaToJavascriptStringTable[Key],
-				NewValue
-			))()
+					GetElementJavascriptFunction,
+					Instance.UniqueId,
+					LuaToJavascriptStringTable[Key],
+					EscapeString(NewValue)
+				)
+			)()
 		elseif LuaToJavascriptNumberTable[Key] or LuaToJavascriptBooleanTable[Key] then
 			Goose:LoadString(
 				string.format(

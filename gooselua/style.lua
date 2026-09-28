@@ -2,6 +2,10 @@ local Lunar = require("lunar")
 local JSONService = Lunar:GetService("JSONService")
 local StyleModule = {}
 
+local function EscapeString(String)
+	return String:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t")
+end
+
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
   const Element = Module.GooseElements.get(UniqueId)
@@ -44,6 +48,9 @@ function StyleModule.new()
 	end
 
 	self.__newindex = function(Instance, Key, NewValue)
+		if type(NewValue) ~= "string" then
+			return
+		end
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
 
 		Goose:LoadString(string.format(
@@ -57,7 +64,7 @@ function StyleModule.new()
 			Instance.UniqueId,
 			VerifyJavascriptFunction,
 			Key,
-			NewValue
+			EscapeString(NewValue)
 		))()
 	end
 
