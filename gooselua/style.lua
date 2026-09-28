@@ -2,10 +2,6 @@ local Lunar = require("lunar")
 local JSONService = Lunar:GetService("JSONService")
 local StyleModule = {}
 
-local function EscapeString(String)
-	return String:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t")
-end
-
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
   const Element = Module.GooseElements.get(UniqueId)
@@ -16,11 +12,21 @@ function GetElement(UniqueId) {
 }
 ]]
 
-local VerifyJavascriptFunction = [[
-if (!Style) {
-  return ""
-}
-]]
+local CompiledGetStringProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+  const Style = GetElement(Arguments[0])
+  if (!Style) {
+    return ""
+  }
+  return JSON.stringify(Style[Arguments[1]])
+]=])
+
+local CompiledSetStringProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+  const Style = GetElement(Arguments[0])
+  if (!Style) {
+    return ""
+  }
+  Style[Arguments[1]] = Arguments[2]
+]=])
 
 function StyleModule.new()
 	local self = {}
@@ -28,18 +34,7 @@ function StyleModule.new()
 	self.__index = function(Instance, Key)
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
 
-		local Value = Goose:LoadString(string.format(
-			[[
-        %s
-        const Style = GetElement("%s")
-        %s
-        return JSON.stringify(Style.%s)
-    ]],
-			GetElementJavascriptFunction,
-			Instance.UniqueId,
-			VerifyJavascriptFunction,
-			Key
-		))()
+		local Value = CompiledGetStringProperty(Instance.UniqueId, Key)
 
 		if Value == "" then
 			return
@@ -53,19 +48,7 @@ function StyleModule.new()
 		end
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
 
-		Goose:LoadString(string.format(
-			[[
-        %s
-        const Style = GetElement("%s")
-        %s
-        Style.%s = "%s"
-    ]],
-			GetElementJavascriptFunction,
-			Instance.UniqueId,
-			VerifyJavascriptFunction,
-			Key,
-			EscapeString(NewValue)
-		))()
+		CompiledSetStringProperty(Instance.UniqueId, Key, NewValue)
 	end
 
 	return self

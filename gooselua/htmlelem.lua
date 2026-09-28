@@ -2,10 +2,6 @@ local Lunar = require("lunar")
 local JSONService = Lunar:GetService("JSONService")
 local Module = {}
 
-local function EscapeString(String)
-	return String:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n"):gsub("\r", "\\r"):gsub("\t", "\\t")
-end
-
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
   const Element = Module.GooseElements.get(UniqueId)
@@ -186,6 +182,57 @@ local LuaToJavascriptElementTable = {
 	OwnerDocument = "ownerDocument",
 }
 
+local CompiledGetStringOrNumberOrBooleanProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+	return JSON.stringify(Element[Arguments[1]])
+]=])
+
+local CompiledGetElementProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+	const Child = Element[Arguments[1]]
+
+	if (!Child) {
+		return ""
+	}
+
+	Module.GooseElements.set(Arguments[2], Child)
+
+	return "Ok"
+]=])
+
+local CompiledSetStringProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+	Element[Arguments[1]] = Arguments[2]
+]=])
+
+local CompiledSetNumberOrBooleanProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+	Element[Arguments[1]] = Arguments[2]
+]=])
+
+local CompiledCreateElement = Goose:LoadString([=[
+	if (!Module.GooseElements) {
+		Module.GooseElements = new Map()
+	}
+
+	Module.GooseElements.set(
+		Arguments[0],
+		document.createElement(Arguments[1])
+	)
+]=])
+
+local CompiledSetStyleElement = Goose:LoadString(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+	Module.GooseElements.set(Arguments[1], Element.style)
+]=])
+
+local CompiledAppendChild = Goose:LoadString(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+	const Parent = GetElement(Arguments[1])
+
+	Parent.appendChild(Element)
+]=])
+
 function Module.new()
 	local self = {}
 
@@ -194,16 +241,7 @@ function Module.new()
 			or LuaToJavascriptNumberTable[Key]
 			or LuaToJavascriptBooleanTable[Key]
 		if JavascriptKey then
-			local Value = Goose:LoadString(string.format(
-				[[
-          %s
-          const Element = GetElement("%s")
-          return JSON.stringify(Element.%s)
-      ]],
-				GetElementJavascriptFunction,
-				Instance.UniqueId,
-				JavascriptKey
-			))()
+			local Value = CompiledGetStringOrNumberOrBooleanProperty(Instance.UniqueId, JavascriptKey)
 
 			if Value == "undefined" then
 				return nil
@@ -214,27 +252,8 @@ function Module.new()
 		if LuaToJavascriptElementTable[Key] then
 			local HtmlElement = Lunar.Instance.new("HtmlElement")
 
-			local Value = Goose:LoadString(
-				string.format(
-					[[
-          %s
-          const Element = GetElement("%s")
-          const Child = Element.%s
-
-          if (!Child) {
-            return ""
-          }
-
-          Module.GooseElements.set("%s", Child)
-          return "Ok"
-      ]],
-					GetElementJavascriptFunction,
-					Instance.UniqueId,
-					LuaToJavascriptElementTable[Key],
-					HtmlElement.UniqueId
-				)
-			)()
-
+			local Value =
+				CompiledGetElementProperty(Instance.UniqueId, LuaToJavascriptElementTable[Key], HtmlElement.UniqueId)
 			if Value == "undefined" then
 				return nil
 			end
@@ -244,71 +263,23 @@ function Module.new()
 
 	self.__newindex = function(Instance, Key, NewValue)
 		if LuaToJavascriptStringTable[Key] then
-			Goose:LoadString(
-				string.format(
-					[[
-        %s
-        const Element = GetElement("%s")
-        Element.%s = "%s"
-      ]],
-					GetElementJavascriptFunction,
-					Instance.UniqueId,
-					LuaToJavascriptStringTable[Key],
-					EscapeString(NewValue)
-				)
-			)()
+			CompiledSetStringProperty(Instance.UniqueId, LuaToJavascriptStringTable[Key], NewValue)
 		elseif LuaToJavascriptNumberTable[Key] or LuaToJavascriptBooleanTable[Key] then
-			Goose:LoadString(
-				string.format(
-					[[
-        %s
-        const Element = GetElement("%s")
-        Element.%s = %s
-      ]],
-					GetElementJavascriptFunction,
-					Instance.UniqueId,
-					LuaToJavascriptNumberTable[Key] or LuaToJavascriptBooleanTable[Key],
-					tostring(NewValue)
-				)
-			)()
+			CompiledSetNumberOrBooleanProperty(
+				Instance.UniqueId,
+				LuaToJavascriptNumberTable[Key] or LuaToJavascriptBooleanTable[Key],
+				tostring(NewValue)
+			)
 		end
 
 		if Key == "TagName" then
 			NewValue = NewValue:sub(1, 1):lower() .. NewValue:sub(2)
-			Goose:LoadString(string.format(
-				[[
-        if (!Module.GooseElements) {
-          Module.GooseElements = new Map()
-        }
-        Module.GooseElements.set("%s", document.createElement("%s"))
-      ]],
-				Instance.UniqueId,
-				NewValue
-			))()
+			CompiledCreateElement(Instance.UniqueId, NewValue)
 
 			Instance.Style = Instance.Style or Lunar.Instance.new("HtmlStyle")
-			Goose:LoadString(string.format(
-				[[
-        %s
-        const Element = GetElement("%s")
-        Module.GooseElements.set("%s", Element.style)
-      ]],
-				GetElementJavascriptFunction,
-				Instance.UniqueId,
-				Instance.Style.UniqueId
-			))()
+			CompiledSetStyleElement(Instance.UniqueId, Instance.Style.UniqueId)
 		elseif Key == "Parent" then
-			Goose:LoadString(string.format(
-				[[
-        %s
-        const Element = GetElement("%s")
-        const Parent = GetElement("%s")
-        Parent.appendChild(Element)
-      ]],
-				GetElementJavascriptFunction,
-				Instance.UniqueId,
-				NewValue.UniqueId
-			))()
+			CompiledAppendChild(Instance.UniqueId, NewValue.UniqueId)
 		end
 	end
 

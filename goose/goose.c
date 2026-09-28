@@ -33,6 +33,54 @@ EM_JS(char *, GooseCallJavaScript, (int Id, char *ArgumentsJson), {
   return Pointer;
 });
 
+void GooseAddJsonString(luaL_Buffer *Buffer, const char *Value) {
+  luaL_addchar(Buffer, '"');
+
+  for (const unsigned char *p = (const unsigned char *)Value; *p; p++) {
+    switch (*p) {
+    case '"':
+      luaL_addstring(Buffer, "\\\"");
+      break;
+
+    case '\\':
+      luaL_addstring(Buffer, "\\\\");
+      break;
+
+    case '\b':
+      luaL_addstring(Buffer, "\\b");
+      break;
+
+    case '\f':
+      luaL_addstring(Buffer, "\\f");
+      break;
+
+    case '\n':
+      luaL_addstring(Buffer, "\\n");
+      break;
+
+    case '\r':
+      luaL_addstring(Buffer, "\\r");
+      break;
+
+    case '\t':
+      luaL_addstring(Buffer, "\\t");
+      break;
+
+    default:
+      if (*p < 0x20) {
+        char Escape[7];
+        snprintf(Escape, sizeof(Escape), "\\u%04x", *p);
+        luaL_addstring(Buffer, Escape);
+      } else {
+        luaL_addchar(Buffer, *p);
+      }
+      break;
+    }
+  }
+
+  luaL_addchar(Buffer, '"');
+}
+
 int GooseLoadStringCall(lua_State *Lua) {
   int *Id = luaL_checkudata(Lua, 1, "GooseCompFunction");
 
@@ -44,14 +92,12 @@ int GooseLoadStringCall(lua_State *Lua) {
   luaL_addchar(&Buffer, '[');
 
   for (int i = 0; i < ArgumentCount; i++) {
-    if (i > 0)
+    if (i > 0) {
       luaL_addchar(&Buffer, ',');
+    }
 
     const char *Value = luaL_checkstring(Lua, i + 2);
-
-    luaL_addchar(&Buffer, '"');
-    luaL_addstring(&Buffer, Value);
-    luaL_addchar(&Buffer, '"');
+    GooseAddJsonString(&Buffer, Value);
   }
 
   luaL_addchar(&Buffer, ']');
