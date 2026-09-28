@@ -7,7 +7,7 @@
 
 EM_JS(int, GooseCompileJavaScript, (char *String), {
   String = UTF8ToString(String);
-  const CompFunction = new Function(String);
+  const CompFunction = new Function("Arguments", String);
 
   if (!Module.GooseFunctions) {
     Module.GooseFunctions = new Map();
@@ -19,9 +19,11 @@ EM_JS(int, GooseCompileJavaScript, (char *String), {
   return Id;
 });
 
-EM_JS(char *, GooseCallJavaScript, (int Id), {
+EM_JS(char *, GooseCallJavaScript, (int Id, char *ArgumentsJson), {
   const CompFunction = Module.GooseFunctions.get(Id);
-  const ReturnString = String(CompFunction());
+
+  const Arguments = JSON.parse(UTF8ToString(ArgumentsJson));
+  const ReturnString = String(CompFunction(Arguments));
 
   const Length = lengthBytesUTF8(ReturnString) + 1;
   const Pointer = _malloc(Length);
@@ -33,9 +35,33 @@ EM_JS(char *, GooseCallJavaScript, (int Id), {
 
 int GooseLoadStringCall(lua_State *Lua) {
   int *Id = luaL_checkudata(Lua, 1, "GooseCompFunction");
-  char *ReturnString = GooseCallJavaScript(*Id);
-  lua_pushstring(Lua, ReturnString);
 
+  int ArgumentCount = lua_gettop(Lua) - 1;
+
+  luaL_Buffer Buffer;
+  luaL_buffinit(Lua, &Buffer);
+
+  luaL_addchar(&Buffer, '[');
+
+  for (int i = 0; i < ArgumentCount; i++) {
+    if (i > 0)
+      luaL_addchar(&Buffer, ',');
+
+    const char *Value = luaL_checkstring(Lua, i + 2);
+
+    luaL_addchar(&Buffer, '"');
+    luaL_addstring(&Buffer, Value);
+    luaL_addchar(&Buffer, '"');
+  }
+
+  luaL_addchar(&Buffer, ']');
+  luaL_pushresult(&Buffer);
+
+  const char *ArgumentsJson = lua_tostring(Lua, -1);
+  char *ReturnString = GooseCallJavaScript(*Id, (char *)ArgumentsJson);
+  lua_pop(Lua, 1);
+
+  lua_pushstring(Lua, ReturnString);
   return 1;
 }
 
