@@ -84,6 +84,7 @@ emcc $CFlags $LDFlags \
   build/luasocket/*.o \
   build/luafilesystem/*.o \
   -sEXPORTED_FUNCTIONS=_Main \
+  -sASYNCIFY=1 \
   -o web/goosel/wgoose.js
 
 lua build.lua

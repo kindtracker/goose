@@ -48,6 +48,12 @@ int GooseLoadString(lua_State *Lua) {
   return 1;
 }
 
+int GooseYield(lua_State *Lua) {
+  emscripten_sleep(0);
+
+  return 0;
+}
+
 int GooseLuaGlobal(lua_State *Lua) {
   luaL_newmetatable(Lua, "GooseCompFunction");
   lua_pushcfunction(Lua, GooseLoadStringCall);
@@ -57,6 +63,8 @@ int GooseLuaGlobal(lua_State *Lua) {
   lua_newtable(Lua);
   lua_pushcfunction(Lua, GooseLoadString);
   lua_setfield(Lua, -2, "LoadString");
+  lua_pushcfunction(Lua, GooseYield);
+  lua_setfield(Lua, -2, "Yield");
   lua_setglobal(Lua, "Goose");
 
   return 0;
