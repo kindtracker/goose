@@ -200,17 +200,17 @@ local CompiledGetElementProperty = Goose:LoadString(GetElementJavascriptFunction
 	return "Ok"
 ]=])
 
-local CompiledSetStringProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledSetStringProperty = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	Element[Arguments[1]] = Arguments[2]
 ]=])
 
-local CompiledSetNumberOrBooleanProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledSetNumberOrBooleanProperty = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	Element[Arguments[1]] = Arguments[2]
 ]=])
 
-local CompiledCreateElement = Goose:LoadString([=[
+local CompiledCreateElement = Goose:LoadStringVoid([=[
 	if (!Module.GooseElements) {
 		Module.GooseElements = new Map()
 	}
@@ -221,12 +221,12 @@ local CompiledCreateElement = Goose:LoadString([=[
 	)
 ]=])
 
-local CompiledSetStyleElement = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledSetStyleElement = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	Module.GooseElements.set(Arguments[1], Element.style)
 ]=])
 
-local CompiledAppendChild = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledAppendChild = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	const Parent = GetElement(Arguments[1])
 

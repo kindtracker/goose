@@ -33,6 +33,13 @@ EM_JS(char *, GooseCallJavaScript, (int Id, char *ArgumentsJson), {
   return Pointer;
 });
 
+EM_JS(void, GooseCallJavaScriptVoid, (int Id, char *ArgumentsJson), {
+  const CompFunction = Module.GooseFunctions.get(Id);
+
+  const Arguments = JSON.parse(UTF8ToString(ArgumentsJson));
+  CompFunction(Arguments);
+});
+
 void GooseAddJsonString(luaL_Buffer *Buffer, const char *Value) {
   luaL_addchar(Buffer, '"');
 
@@ -82,7 +89,7 @@ void GooseAddJsonString(luaL_Buffer *Buffer, const char *Value) {
 }
 
 int GooseLoadStringCall(lua_State *Lua) {
-  int *Id = luaL_checkudata(Lua, 1, "GooseCompFunction");
+  int *Id = luaL_checkudata(Lua, 1, "GooseCompiledFunction");
 
   int ArgumentCount = lua_gettop(Lua) - 1;
 
@@ -111,11 +118,49 @@ int GooseLoadStringCall(lua_State *Lua) {
   return 1;
 }
 
+int GooseLoadStringVoidCall(lua_State *Lua) {
+  int *Id = luaL_checkudata(Lua, 1, "GooseCompiledVoidFunction");
+
+  int ArgumentCount = lua_gettop(Lua) - 1;
+
+  luaL_Buffer Buffer;
+  luaL_buffinit(Lua, &Buffer);
+
+  luaL_addchar(&Buffer, '[');
+
+  for (int i = 0; i < ArgumentCount; i++) {
+    if (i > 0)
+      luaL_addchar(&Buffer, ',');
+
+    const char *Value = luaL_checkstring(Lua, i + 2);
+    GooseAddJsonString(&Buffer, Value);
+  }
+
+  luaL_addchar(&Buffer, ']');
+  luaL_pushresult(&Buffer);
+
+  const char *ArgumentsJson = lua_tostring(Lua, -1);
+
+  GooseCallJavaScriptVoid(*Id, (char *)ArgumentsJson);
+
+  lua_pop(Lua, 1);
+  return 0;
+}
+
 int GooseLoadString(lua_State *Lua) {
   const char *String = luaL_checkstring(Lua, 2);
   int *Id = lua_newuserdatauv(Lua, sizeof(int), 0);
   *Id = GooseCompileJavaScript(String);
-  luaL_setmetatable(Lua, "GooseCompFunction");
+  luaL_setmetatable(Lua, "GooseCompiledFunction");
+
+  return 1;
+}
+
+int GooseLoadStringVoid(lua_State *Lua) {
+  const char *String = luaL_checkstring(Lua, 2);
+  int *Id = lua_newuserdatauv(Lua, sizeof(int), 0);
+  *Id = GooseCompileJavaScript(String);
+  luaL_setmetatable(Lua, "GooseCompiledVoidFunction");
 
   return 1;
 }
@@ -127,14 +172,21 @@ int GooseYield(lua_State *Lua) {
 }
 
 int GooseLuaGlobal(lua_State *Lua) {
-  luaL_newmetatable(Lua, "GooseCompFunction");
+  luaL_newmetatable(Lua, "GooseCompiledFunction");
   lua_pushcfunction(Lua, GooseLoadStringCall);
+  lua_setfield(Lua, -2, "__call");
+  lua_pop(Lua, 1);
+
+  luaL_newmetatable(Lua, "GooseCompiledVoidFunction");
+  lua_pushcfunction(Lua, GooseLoadStringVoidCall);
   lua_setfield(Lua, -2, "__call");
   lua_pop(Lua, 1);
 
   lua_newtable(Lua);
   lua_pushcfunction(Lua, GooseLoadString);
   lua_setfield(Lua, -2, "LoadString");
+  lua_pushcfunction(Lua, GooseLoadStringVoid);
+  lua_setfield(Lua, -2, "LoadStringVoid");
   lua_pushcfunction(Lua, GooseYield);
   lua_setfield(Lua, -2, "Yield");
   lua_setglobal(Lua, "Goose");

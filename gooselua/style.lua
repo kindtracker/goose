@@ -20,10 +20,10 @@ local CompiledGetStringProperty = Goose:LoadString(GetElementJavascriptFunction 
   return JSON.stringify(Style[Arguments[1]])
 ]=])
 
-local CompiledSetStringProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledSetStringProperty = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
   const Style = GetElement(Arguments[0])
   if (!Style) {
-    return ""
+    return
   }
   Style[Arguments[1]] = Arguments[2]
 ]=])
