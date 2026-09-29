@@ -8,7 +8,7 @@ async function GetContent(Url, Text) {
   return Text ? await Response.text() : await Response.json();
 }
 
-window.addEventListener("GooseLuaLoaded", () => {
+window.addEventListener("NekoLuaLoaded", () => {
 });
 
 window.Module = {
@@ -19,8 +19,8 @@ window.Module = {
       FS.writeFile("/" + FilePath, FileContent);
     }
 
-    FS.mkdirTree("/gooselib");
-    for (const [FilePath, FileContent] of Object.entries(window.GoosePackages)) {
+    FS.mkdirTree("/nekolib");
+    for (const [FilePath, FileContent] of Object.entries(window.NekoPackages)) {
       const Directory = FilePath.substring(0, FilePath.lastIndexOf("/"));
       if (Directory) {
         FS.mkdirTree(Directory);
@@ -28,7 +28,7 @@ window.Module = {
       FS.writeFile(FilePath, FileContent);
     }
 
-    console.log("[Goose] Initialized");
+    console.log("[Neko] Initialized");
     Module._Main();
   }
 };

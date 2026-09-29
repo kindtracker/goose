@@ -1,8 +1,8 @@
-web/goosel/wgoose.js
-web/goosel/wgoose.wasm
-web/goosel/wgoose.wasm.js
-web/goosel/packages.js
-web/goosel/vendors
+web/nekol/wneko.js
+web/nekol/wneko.wasm
+web/nekol/wneko.wasm.js
+web/nekol/packages.js
+web/nekol/vendors
 web/lunar
 web/luasocket
 web/luamimetypes

@@ -4,7 +4,7 @@ local StyleModule = {}
 
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
-  const Element = Module.GooseElements.get(UniqueId)
+  const Element = Module.NekoElements.get(UniqueId)
   if (Element?.tagName == "BODY") {
     return document.body
   }
@@ -12,7 +12,7 @@ function GetElement(UniqueId) {
 }
 ]]
 
-local CompiledGetStringProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledGetStringProperty = Neko:LoadString(GetElementJavascriptFunction .. [=[
   const Style = GetElement(Arguments[0])
   if (!Style) {
     return ""
@@ -20,7 +20,7 @@ local CompiledGetStringProperty = Goose:LoadString(GetElementJavascriptFunction 
   return JSON.stringify(Style[Arguments[1]])
 ]=])
 
-local CompiledSetStringProperty = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
+local CompiledSetStringProperty = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
   const Style = GetElement(Arguments[0])
   if (!Style) {
     return

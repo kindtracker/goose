@@ -2,7 +2,7 @@ local StyleModule = {}
 
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
-  const Element = Module.GooseElements.get(UniqueId)
+  const Element = Module.NekoElements.get(UniqueId)
   if (Element.tagName == "BODY") {
     return document.body
   }
@@ -15,12 +15,12 @@ function StyleModule.new()
 	self.__Internal__StyleLoaded = false
 
 	self.__Internal__StyleLoad = function(Instance)
-		Goose:LoadString(string.format(
+		Neko:LoadString(string.format(
 			[[
-      if (!Module.GooseElements) {
-        Module.GooseElements = new Map()
+      if (!Module.NekoElements) {
+        Module.NekoElements = new Map()
       }
-      Module.GooseElements.set("%s", document.createElement("div").style)
+      Module.NekoElements.set("%s", document.createElement("div").style)
     ]],
 			Instance.UniqueId
 		))()
@@ -33,7 +33,7 @@ function StyleModule.new()
 
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
 
-		local Value = Goose:LoadString(string.format(
+		local Value = Neko:LoadString(string.format(
 			[[
         %s
         const Element = GetElement("%s")
@@ -54,7 +54,7 @@ function StyleModule.new()
 
 		Key = Key:sub(1, 1):lower() .. Key:sub(2)
 
-		Goose:LoadString(string.format(
+		Neko:LoadString(string.format(
 			[[
         %s
         const Element = GetElement("%s")

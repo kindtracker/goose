@@ -4,7 +4,7 @@ local Module = {}
 
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
-  const Element = Module.GooseElements.get(UniqueId)
+  const Element = Module.NekoElements.get(UniqueId)
   if (Element?.tagName == "BODY") {
     return document.body
   }
@@ -182,12 +182,12 @@ local LuaToJavascriptElementTable = {
 	OwnerDocument = "ownerDocument",
 }
 
-local CompiledGetStringOrNumberOrBooleanProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledGetStringOrNumberOrBooleanProperty = Neko:LoadString(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	return JSON.stringify(Element[Arguments[1]])
 ]=])
 
-local CompiledGetElementProperty = Goose:LoadString(GetElementJavascriptFunction .. [=[
+local CompiledGetElementProperty = Neko:LoadString(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	const Child = Element[Arguments[1]]
 
@@ -195,38 +195,38 @@ local CompiledGetElementProperty = Goose:LoadString(GetElementJavascriptFunction
 		return ""
 	}
 
-	Module.GooseElements.set(Arguments[2], Child)
+	Module.NekoElements.set(Arguments[2], Child)
 
 	return "Ok"
 ]=])
 
-local CompiledSetStringProperty = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
+local CompiledSetStringProperty = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	Element[Arguments[1]] = Arguments[2]
 ]=])
 
-local CompiledSetNumberOrBooleanProperty = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
+local CompiledSetNumberOrBooleanProperty = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	Element[Arguments[1]] = Arguments[2]
 ]=])
 
-local CompiledCreateElement = Goose:LoadStringVoid([=[
-	if (!Module.GooseElements) {
-		Module.GooseElements = new Map()
+local CompiledCreateElement = Neko:LoadStringVoid([=[
+	if (!Module.NekoElements) {
+		Module.NekoElements = new Map()
 	}
 
-	Module.GooseElements.set(
+	Module.NekoElements.set(
 		Arguments[0],
 		document.createElement(Arguments[1])
 	)
 ]=])
 
-local CompiledSetStyleElement = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
+local CompiledSetStyleElement = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
-	Module.GooseElements.set(Arguments[1], Element.style)
+	Module.NekoElements.set(Arguments[1], Element.style)
 ]=])
 
-local CompiledAppendChild = Goose:LoadStringVoid(GetElementJavascriptFunction .. [=[
+local CompiledAppendChild = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	const Parent = GetElement(Arguments[1])
 

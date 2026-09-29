@@ -4,7 +4,7 @@ local Module = {}
 
 local GetElementJavascriptFunction = [[
 function GetElement(UniqueId) {
-  const Element = Module.GooseElements.get(UniqueId)
+  const Element = Module.NekoElements.get(UniqueId)
   if (Element.tagName == "BODY") {
     return document.body
   }
@@ -97,7 +97,7 @@ function Module.new()
 			or LuaToJavascriptNumberTable[Key]
 			or LuaToJavascriptBooleanTable[Key]
 		if JavascriptKey then
-			local Value = Goose:LoadString(string.format(
+			local Value = Neko:LoadString(string.format(
 				[[
           %s
           const Element = GetElement("%s")
@@ -114,7 +114,7 @@ function Module.new()
 		if LuaToJavascriptElementTable[Key] then
 			local HtmlElement = Lunar.Instance.new("HtmlElement")
 
-			local Value = Goose:LoadString(
+			local Value = Neko:LoadString(
 				string.format(
 					[[
           %s
@@ -125,7 +125,7 @@ function Module.new()
             return ""
           }
 
-          Module.GooseElements.set("%s", Child)
+          Module.NekoElements.set("%s", Child)
           return "Ok"
       ]],
 					GetElementJavascriptFunction,
@@ -145,7 +145,7 @@ function Module.new()
 
 	self.__newindex = function(Instance, Key, NewValue)
 		if LuaToJavascriptStringTable[Key] then
-			Goose:LoadString(string.format(
+			Neko:LoadString(string.format(
 				[[
         %s
         const Element = GetElement("%s")
@@ -157,7 +157,7 @@ function Module.new()
 				NewValue
 			))()
 		elseif LuaToJavascriptNumberTable[Key] or LuaToJavascriptBooleanTable[Key] then
-			Goose:LoadString(
+			Neko:LoadString(
 				string.format(
 					[[
         %s
@@ -174,18 +174,18 @@ function Module.new()
 
 		if Key == "TagName" then
 			NewValue = NewValue:sub(1, 1):lower() .. NewValue:sub(2)
-			Goose:LoadString(string.format(
+			Neko:LoadString(string.format(
 				[[
-        if (!Module.GooseElements) {
-          Module.GooseElements = new Map()
+        if (!Module.NekoElements) {
+          Module.NekoElements = new Map()
         }
-        Module.GooseElements.set("%s", document.createElement("%s"))
+        Module.NekoElements.set("%s", document.createElement("%s"))
       ]],
 				Instance.UniqueId,
 				NewValue
 			))()
 		elseif Key == "Parent" then
-			Goose:LoadString(string.format(
+			Neko:LoadString(string.format(
 				[[
         %s
         const Element = GetElement("%s")
@@ -197,7 +197,7 @@ function Module.new()
 				NewValue.UniqueId
 			))()
 		elseif Key == "Style" then
-			Goose:LoadString(string.format(
+			Neko:LoadString(string.format(
 				[[
         %s
         const Element = GetElement("%s")

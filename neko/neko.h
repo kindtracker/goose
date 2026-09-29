@@ -2,4 +2,4 @@
 #include "lua.h"
 #include "lualib.h"
 
-int GooseLuaGlobal(lua_State *Lua);
+int NekoLuaGlobal(lua_State *Lua);

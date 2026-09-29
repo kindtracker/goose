@@ -281,24 +281,24 @@ local Packages = {
 		Install = PackagesPath .. "socket/url.lua",
 	},
 
-	["gooselib/goose.lua"] = {
-		Source = "gooselua/goose.lua",
-		Install = "/gooselib/goose.lua",
+	["nekolib/neko.lua"] = {
+		Source = "nekolua/neko.lua",
+		Install = "/nekolib/neko.lua",
 	},
 
-	["gooselib/page.lua"] = {
-		Source = "gooselua/page.lua",
-		Install = "/gooselib/page.lua",
+	["nekolib/page.lua"] = {
+		Source = "nekolua/page.lua",
+		Install = "/nekolib/page.lua",
 	},
 
-	["gooselib/htmlelem.lua"] = {
-		Source = "gooselua/htmlelem.lua",
-		Install = "/gooselib/htmlelem.lua",
+	["nekolib/htmlelem.lua"] = {
+		Source = "nekolua/htmlelem.lua",
+		Install = "/nekolib/htmlelem.lua",
 	},
 
-	["gooselib/style.lua"] = {
-		Source = "gooselua/style.lua",
-		Install = "/gooselib/style.lua",
+	["nekolib/style.lua"] = {
+		Source = "nekolua/style.lua",
+		Install = "/nekolib/style.lua",
 	},
 }
 
@@ -306,8 +306,8 @@ local function Escape(String)
 	return String:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\r", "\\r"):gsub("\n", "\\n"):gsub("\t", "\\t")
 end
 
-local Output = assert(io.open("web/goosel/packages.js", "w"))
-Output:write("window.GoosePackages = {\n")
+local Output = assert(io.open("web/nekol/packages.js", "w"))
+Output:write("window.NekoPackages = {\n")
 
 for FilePath, Package in pairs(Packages) do
 	print(string.format("  GEN  %s", FilePath))
@@ -321,4 +321,4 @@ end
 Output:write("};\n")
 Output:close()
 
-print("  BUNDLE web/goosel/packages.js")
+print("  BUNDLE web/nekol/packages.js")

@@ -10,7 +10,7 @@ mkdir build
 mkdir build/lua
 mkdir build/luasocket
 mkdir build/luafilesystem
-mkdir build/goose
+mkdir build/neko
 
 CompileLua() {
   File="$1"
@@ -43,9 +43,9 @@ CompileLuaSocket() {
     -o "$Object"
 }
 
-CompileGoose() {
+CompileNeko() {
   File="$1"
-  Object="build/goose/$(echo "$File" | sed 's#/#_#g; s#\.c$#.o#')"
+  Object="build/neko/$(echo "$File" | sed 's#/#_#g; s#\.c$#.o#')"
 
   echo "  CC  $File"
   emcc $CFlags -c "$File" \
@@ -58,11 +58,11 @@ CompileGoose() {
 export -f CompileLua
 export -f CompileLuaFileSystem
 export -f CompileLuaSocket
-export -f CompileGoose
+export -f CompileNeko
 export CFlags
 
-find goose -name "*.c" |
-  xargs -P "$Jobs" -n 1 bash -c 'CompileGoose "$1"' _
+find neko -name "*.c" |
+  xargs -P "$Jobs" -n 1 bash -c 'CompileNeko "$1"' _
 
 find vendors/lua -name "*.c" \
   ! -name "onelua.c" \
@@ -78,13 +78,13 @@ find vendors/luasocket -name "*.c" \
   ! -name "serial.c" |
   xargs -P "$Jobs" -n 1 bash -c 'CompileLuaSocket "$1"' _
 
-echo "  LD  web/goosel/wgoose.js"
+echo "  LD  web/nekol/wneko.js"
 emcc $CFlags $LDFlags \
-  build/lua/*.o build/goose/*.o \
+  build/lua/*.o build/neko/*.o \
   build/luasocket/*.o \
   build/luafilesystem/*.o \
   -sEXPORTED_FUNCTIONS=_Main \
   -sASYNCIFY=1 \
-  -o web/goosel/wgoose.js
+  -o web/nekol/wneko.js
 
 lua build.lua

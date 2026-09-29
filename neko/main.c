@@ -8,7 +8,7 @@
 #include "luasocket.h"
 #include "mime.h"
 
-#include "goose.h"
+#include "neko.h"
 
 int Main() {
   lua_State *Lua = luaL_newstate();
@@ -35,15 +35,15 @@ int Main() {
   lua_setfield(Lua, -2, "path");
   lua_pop(Lua, 1);
 
-  GooseLuaGlobal(Lua);
+  NekoLuaGlobal(Lua);
 
-  if (luaL_dofile(Lua, "/gooselib/goose.lua") != LUA_OK) {
-    printf("[Goose] Lua error: %s\n", lua_tostring(Lua, -1));
+  if (luaL_dofile(Lua, "/nekolib/neko.lua") != LUA_OK) {
+    printf("[Neko] Lua error: %s\n", lua_tostring(Lua, -1));
     return 1;
   }
 
   if (luaL_dofile(Lua, "main.lua") != LUA_OK) {
-    printf("[Goose] Lua error: %s\n", lua_tostring(Lua, -1));
+    printf("[Neko] Lua error: %s\n", lua_tostring(Lua, -1));
     return 1;
   }
 

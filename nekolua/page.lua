@@ -8,7 +8,7 @@ function PagePlugin.new(TagName, Parent)
 end
 
 function PagePlugin:SetTitle(Title)
-	Goose:LoadString([[
+	Neko:LoadString([[
     document.title = "]] .. Title .. '"')()
 end
 
@@ -17,7 +17,7 @@ function PagePlugin:InitPlugin()
 	BodyElement.TagName = "Body"
 	PagePlugin.Body = BodyElement
 
-	Goose.Page = PagePlugin
+	Neko.Page = PagePlugin
 end
 
 return PagePlugin

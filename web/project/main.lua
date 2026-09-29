@@ -1,8 +1,8 @@
 local Lunar = require("lunar")
 local Task = Lunar:GetService("TaskService")
-local Page = Goose.Page
+local Page = Neko.Page
 
-Page:SetTitle("Goose")
+Page:SetTitle("Neko")
 
 local FloodLayers = {
 	{
@@ -69,5 +69,5 @@ end)
 
 while true do
 	Task:Step()
-	Goose:Yield()
+	Neko:Yield()
 end
