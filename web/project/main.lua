@@ -3,6 +3,7 @@ local Task = Lunar:GetService("TaskService")
 local Page = Neko.Page
 
 Page.Title = "Neko"
+print(Page.Location.Port)
 
 local FloodLayers = {
 	{

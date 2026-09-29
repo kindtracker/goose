@@ -15,7 +15,7 @@ function GetElement(UniqueId) {
 local CompiledGetStringProperty = Neko:LoadString(GetElementJavascriptFunction .. [=[
   const Style = GetElement(Arguments[0])
   if (!Style) {
-    return ""
+    return "404"
   }
   return JSON.stringify(Style[Arguments[1]])
 ]=])
@@ -36,7 +36,7 @@ function StyleModule.new()
 
 		local Value = CompiledGetStringProperty(Instance.UniqueId, Key)
 
-		if Value == "" then
+		if Value == "404" then
 			return
 		end
 		return JSONService:Decode(Value)

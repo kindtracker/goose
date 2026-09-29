@@ -194,7 +194,7 @@ local CompiledGetElementProperty = Neko:LoadString(GetElementJavascriptFunction 
 	const Child = Element[Arguments[1]]
 
 	if (!Child) {
-		return ""
+		return "404"
 	}
 
 	Module.NekoElements.set(Arguments[2], Child)
@@ -213,10 +213,6 @@ local CompiledSetNumberOrBooleanProperty = Neko:LoadStringVoid(GetElementJavascr
 ]=])
 
 local CompiledCreateElement = Neko:LoadStringVoid([=[
-	if (!Module.NekoElements) {
-		Module.NekoElements = new Map()
-	}
-
 	Module.NekoElements.set(
 		Arguments[0],
 		document.createElement(Arguments[1])
@@ -256,7 +252,7 @@ function Module.new()
 
 			local Value =
 				CompiledGetElementProperty(Instance.UniqueId, LuaToJavascriptElementTable[Key], HtmlElement.UniqueId)
-			if Value == "undefined" then
+			if Value == "404" then
 				return nil
 			end
 			return HtmlElement
