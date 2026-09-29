@@ -93,6 +93,14 @@ function Page:GetElementById(Id)
 	return Page:QuerySelector("#" .. Id)
 end
 
+function Page:GetElementsByClassName(ClassName)
+	return Page:QuerySelectorAll("." .. ClassName)
+end
+
+function Page:GetElementsByTagName(ClassName)
+	return Page:QuerySelectorAll(ClassName)
+end
+
 function Page:InitPlugin()
 	local BodyElement = Instance.new("HtmlElement")
 	BodyElement.TagName = "Body"

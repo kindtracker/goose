@@ -87,4 +87,4 @@ emcc $CFlags $LDFlags \
   -sASYNCIFY=1 \
   -o web/nekol/wneko.js
 
-lua build.lua
+lua bundle.lua
