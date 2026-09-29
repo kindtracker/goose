@@ -47,7 +47,9 @@ function Page.new(TagName, Parent)
 	local Element = Instance.new("HtmlElement")
 
 	Element.TagName = TagName
-	Element.Parent = Parent
+	if Parent then
+		Element.Parent = Parent
+	end
 
 	return Element
 end

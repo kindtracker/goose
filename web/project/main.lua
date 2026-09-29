@@ -3,72 +3,105 @@ local Task = Lunar:GetService("TaskService")
 local Page = Neko.Page
 
 Page.Title = "Neko"
-print(Page.Location.Port)
 
-local FloodLayers = {
-	{
-		SpeedX = 0.17,
-		SpeedY = 0.01,
-		BlendMode = "screen",
-	},
+local Oneko = {
+	Position = Vector2.new(0, 12),
 
-	{
-		SpeedX = 0.35,
-		SpeedY = 0.17,
-		BlendMode = "darken",
-	},
+	TileMap = {
+		Idle = {
+			Vector2.new(-3, -3),
+		},
 
-	{
-		SpeedX = 0.25,
-		SpeedY = 0.016,
-		BlendMode = "darken",
-	},
+		Alert = {
+			Vector2.new(-7, -3),
+		},
 
-	{
-		SpeedX = 0.20,
-		SpeedY = 0.07,
-		BlendMode = "overlay",
-	},
+		ScratchSelf = {
+			Vector2.new(-5, 0),
+			Vector2.new(-6, 0),
+			Vector2.new(-7, 0),
+		},
 
-	{
-		SpeedX = 0.30,
-		SpeedY = 0.04,
-		BlendMode = "soft-light",
+		ScratchWallN = {
+			Vector2.new(0, 0),
+			Vector2.new(0, -1),
+		},
+
+		ScratchWallS = {
+			Vector2.new(-7, -1),
+			Vector2.new(-6, -2),
+		},
+
+		ScratchWallE = {
+			Vector2.new(-2, -2),
+			Vector2.new(-2, -3),
+		},
+
+		ScratchWallW = {
+			Vector2.new(-4, 0),
+			Vector2.new(-4, -1),
+		},
+
+		Tired = {
+			Vector2.new(-3, -2),
+		},
+
+		Sleeping = {
+			Vector2.new(-2, 0),
+			Vector2.new(-2, -1),
+		},
+
+		N = {
+			Vector2.new(-1, -2),
+			Vector2.new(-1, -3),
+		},
+
+		NE = {
+			Vector2.new(0, -2),
+			Vector2.new(0, -3),
+		},
+
+		E = {
+			Vector2.new(-3, 0),
+			Vector2.new(-3, -1),
+		},
+
+		SE = {
+			Vector2.new(-5, -1),
+			Vector2.new(-5, -2),
+		},
+
+		S = {
+			Vector2.new(-6, -3),
+			Vector2.new(-7, -2),
+		},
+
+		SW = {
+			Vector2.new(-5, -3),
+			Vector2.new(-6, -1),
+		},
+
+		W = {
+			Vector2.new(-4, -2),
+			Vector2.new(-4, -3),
+		},
+
+		NW = {
+			Vector2.new(-1, 0),
+			Vector2.new(-1, -1),
+		},
 	},
 }
 
-local Images = { "linear-gradient(rgba(0, 20, 40, 0.225), rgba(0, 20, 40, 0.225))" }
-local Repeats = { "repeat" }
-local BlendModes = { "normal" }
-
-for _, Layer in ipairs(FloodLayers) do
-	table.insert(Images, 'url("https://melonking.net/images/flood-water-solid.png")')
-	table.insert(Repeats, "repeat")
-	table.insert(BlendModes, Layer.BlendMode)
-	Layer.X = math.random(0, 600)
-	Layer.Y = math.random(0, 600)
-	print(Layer.X)
-end
-
-Page.Body.Style.BackgroundImage = table.concat(Images, ", ")
-Page.Body.Style.BackgroundRepeat = table.concat(Repeats, ", ")
-Page.Body.Style.BackgroundBlendMode = table.concat(BlendModes, ", ")
-
-Task:Spawn(function()
-	while true do
-		local Positions = {}
-		for _, Layer in ipairs(FloodLayers) do
-			table.insert(Positions, string.format("%.2fpx %.2fpx", Layer.X, Layer.Y))
-			Layer.X = Layer.X + Layer.SpeedX
-			Layer.Y = Layer.Y + Layer.SpeedY
-		end
-		Page.Body.Style.BackgroundPosition = table.concat(Positions, ", ")
-
-		Task.wait(0)
-	end
-end)
+Oneko.Element = Page.new("Div", Page.Body)
+Oneko.Element.Style.Position = "absolute"
+Oneko.Element.Style.Width = "32px"
+Oneko.Element.Style.Height = "32px"
+Oneko.Element.Style.ImageRendering = "pixelated"
+Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
 while true do
-	Task:Step()
+	Oneko.Element.Style.Left = Oneko.Position.X .. "px"
+	Oneko.Element.Style.Top = Oneko.Position.Y .. "px"
 	Neko:Yield()
 end

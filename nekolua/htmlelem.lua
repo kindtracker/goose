@@ -184,6 +184,83 @@ local LuaToJavascriptElementTable = {
 	OwnerDocument = "ownerDocument",
 }
 
+local LuaToJavascriptTagNameTable = {
+	Html = "html",
+	Head = "head",
+	Body = "body",
+
+	Title = "title",
+	Base = "base",
+	Link = "link",
+	Meta = "meta",
+	Style = "style",
+	Script = "script",
+	Noscript = "noscript",
+
+	Div = "div",
+	Span = "span",
+	P = "p",
+	Br = "br",
+	Hr = "hr",
+
+	H1 = "h1",
+	H2 = "h2",
+	H3 = "h3",
+	H4 = "h4",
+	H5 = "h5",
+	H6 = "h6",
+
+	A = "a",
+	Img = "img",
+	Video = "video",
+	Audio = "audio",
+	Source = "source",
+	Track = "track",
+	Picture = "picture",
+	Iframe = "iframe",
+
+	Form = "form",
+	Input = "input",
+	Button = "button",
+	Textarea = "textarea",
+	Select = "select",
+	Option = "option",
+	Label = "label",
+
+	Ul = "ul",
+	Ol = "ol",
+	Li = "li",
+
+	Table = "table",
+	Thead = "thead",
+	Tbody = "tbody",
+	Tfoot = "tfoot",
+	Tr = "tr",
+	Th = "th",
+	Td = "td",
+
+	Section = "section",
+	Article = "article",
+	Header = "header",
+	Footer = "footer",
+	Nav = "nav",
+	Main = "main",
+	Aside = "aside",
+
+	Canvas = "canvas",
+	Svg = "svg",
+
+	Details = "details",
+	Summary = "summary",
+	Dialog = "dialog",
+	Figure = "figure",
+	Figcaption = "figcaption",
+	Time = "time",
+	Pre = "pre",
+	Code = "code",
+	Blockquote = "blockquote",
+}
+
 local CompiledGetStringOrNumberOrBooleanProperty = Neko:LoadString(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	return JSON.stringify(Element[Arguments[1]])
@@ -271,8 +348,7 @@ function Module.new()
 		end
 
 		if Key == "TagName" then
-			NewValue = NewValue:sub(1, 1):lower() .. NewValue:sub(2)
-			CompiledCreateElement(Instance.UniqueId, NewValue)
+			CompiledCreateElement(Instance.UniqueId, LuaToJavascriptTagNameTable[NewValue])
 
 			Instance.Style = Instance.Style or Lunar.Instance.new("HtmlStyle")
 			CompiledSetStyleElement(Instance.UniqueId, Instance.Style.UniqueId)
