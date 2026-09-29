@@ -2,7 +2,7 @@ local Lunar = require("lunar")
 local Task = Lunar:GetService("TaskService")
 local Page = Neko.Page
 
-Page:SetTitle("Neko")
+Page.Title = "Neko"
 
 local FloodLayers = {
 	{

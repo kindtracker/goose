@@ -7,6 +7,8 @@ function GetElement(UniqueId) {
   const Element = Module.NekoElements.get(UniqueId)
   if (Element?.tagName == "BODY") {
     return document.body
+  } else if (Element?.tagName == "HEAD") {
+    return document.head
   }
   return Element
 }
