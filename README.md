@@ -72,7 +72,7 @@ chmod +x build.sh
 ./build.sh
 ```
 
-The generated browser runtime will be placed in `web/nekol`.
+The generated browser runtime will be placed in `web/nekol` or `public/nekol`.
 
 ## Cheatsheet
 

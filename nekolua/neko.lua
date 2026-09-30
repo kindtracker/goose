@@ -4,6 +4,7 @@ local Base = "/nekolib"
 
 Neko:LoadStringVoid([=[
 	Module.NekoElements = new Map()
+	Module.NekoEvents = []
 ]=])()
 
 PluginService:LoadLuaPlugin("CoreNekoStyle", Base .. "/style.lua")
