@@ -300,6 +300,11 @@ local Packages = {
 		Source = "nekolua/style.lua",
 		Install = "/nekolib/style.lua",
 	},
+
+	["nekolib/event.lua"] = {
+		Source = "nekolua/event.lua",
+		Install = "/nekolib/event.lua",
+	},
 }
 
 local function Escape(String)

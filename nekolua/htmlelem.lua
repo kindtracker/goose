@@ -1,5 +1,7 @@
 local Lunar = require("lunar")
 local JSONService = Lunar:GetService("JSONService")
+local Event = require("nekolib/event")
+
 local Module = {}
 
 local GetElementJavascriptFunction = [[
@@ -352,6 +354,8 @@ function Module.new()
 
 			Instance.Style = Instance.Style or Lunar.Instance.new("HtmlStyle")
 			CompiledSetStyleElement(Instance.UniqueId, Instance.Style.UniqueId)
+
+			Instance.Clicked = Event.new(Instance, "Clicked", "click")
 		elseif Key == "Parent" then
 			CompiledAppendChild(Instance.UniqueId, NewValue.UniqueId)
 		end

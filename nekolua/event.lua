@@ -1,8 +1,8 @@
 local Lunar = require("lunar")
 local JSONService = Lunar:GetService("JSONService")
-local LString = Luanr:GetService("LStringLibrary")
-local EventModule = {}
+local LString = Lunar:GetService("LStringLibrary")
 
+local EventModule = {}
 local AllElements = {}
 
 local GetElementJavascriptFunction = [[
@@ -20,12 +20,14 @@ function GetElement(UniqueId) {
 local CompiledAddEventListener = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
   const Element = GetElement(Arguments[0])
   Element.addEventListener(Arguments[1], () => {
-    Module.NekoEvents.push(Arguments[0] .. "$" .. Arguments[2])
+    Module.NekoEvents.push(Arguments[0] + "$" + Arguments[2])
   })
 ]=])
 
 local CompiledGetEvents = Neko:LoadString([=[
-  return JSON.stringify(Module.NekoEvents)
+  const Events = JSON.stringify(Module.NekoEvents)
+  Module.NekoEvents = []
+  return Events
 ]=])
 
 function EventModule.new(Element, EventName, JavascriptEventName)

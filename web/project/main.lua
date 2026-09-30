@@ -5,7 +5,7 @@ local Page = Neko.Page
 Page.Title = "Neko"
 
 local Oneko = {
-	Position = Vector2.new(0, 12),
+	Position = Vector2.new(0, 0),
 
 	TileMap = {
 		Idle = {
@@ -100,8 +100,17 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
+Oneko.Element.Clicked:Connect(function()
+	print("meow meow")
+end)
+
 while true do
-	Oneko.Element.Style.Left = Oneko.Position.X .. "px"
-	Oneko.Element.Style.Top = Oneko.Position.Y .. "px"
+	local Position = Oneko.Position
+	Position.X = Position.X + 0.1
+	Position.Y = Position.Y + 0.1
+
+	Oneko.Element.Style.Left = Position.X .. "px"
+	Oneko.Element.Style.Top = Position.Y .. "px"
 	Neko:Yield()
+	Neko:ProcessEvents()
 end
