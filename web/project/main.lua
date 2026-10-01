@@ -6,6 +6,8 @@ Page.Title = "Neko"
 
 local Oneko = {
 	Position = Vector2.new(0, 0),
+	Speed = 10,
+	FrameCount = 0,
 
 	TileMap = {
 		Idle = {
@@ -93,6 +95,12 @@ local Oneko = {
 	},
 }
 
+local function SetSprite(SpriteName)
+	local SpriteFrames = Oneko.TileMap[SpriteName]
+	local SpritePosition = SpriteFrames[(Oneko.FrameCount % #SpriteFrames) + 1]
+	Oneko.Element.Style.BackgroundPosition = SpritePosition.X * 32 .. "px " .. SpritePosition.Y * 32 .. "px"
+end
+
 Oneko.Element = Page.new("Div", Page.Body)
 Oneko.Element.Style.Position = "absolute"
 Oneko.Element.Style.Width = "32px"
@@ -100,15 +108,48 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
+Task:Spawn(function()
+	while true do
+		local Position = Oneko.Position
+		local Target = Page.MousePosition
+
+		if Target ~= nil then
+			local Difference = Position - Target
+			local Distance = math.sqrt(Difference.X ^ 2 + Difference.Y ^ 2)
+
+			if Distance > Oneko.Speed then
+				Position = Position - (Difference / Distance * Oneko.Speed)
+				Oneko.Position = Position
+
+				local Direction = ""
+
+				if Difference.Y / Distance > 0.5 then
+					Direction = Direction .. "N"
+				elseif Difference.Y / Distance < -0.5 then
+					Direction = Direction .. "S"
+				end
+
+				if Difference.X / Distance < -0.5 then
+					Direction = Direction .. "E"
+				elseif Difference.X / Distance > 0.5 then
+					Direction = Direction .. "W"
+				end
+
+				SetSprite(Direction)
+
+				Oneko.Element.Style.Left = Position.X .. "px"
+				Oneko.Element.Style.Top = Position.Y .. "px"
+			end
+		end
+
+		Oneko.FrameCount = Oneko.FrameCount + 1
+
+		Task.wait(0.1)
+	end
+end)
+
 while true do
-	local Position = Oneko.Position
-	Position.X = Position.X + 0.1
-	Position.Y = Position.Y + 0.1
-
-	print(Page.MousePosition)
-
-	Oneko.Element.Style.Left = Position.X .. "px"
-	Oneko.Element.Style.Top = Position.Y .. "px"
+	Task:Step()
 	Neko:Yield()
 	Neko:ProcessEvents()
 end
