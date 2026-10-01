@@ -100,8 +100,8 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
-Oneko.Element.Clicked:Connect(function()
-	print("meow meow")
+Oneko.Element.Clicked:Connect(function(Event)
+	print("meow meow", Event.ClientX, Event.ClientY)
 end)
 
 while true do

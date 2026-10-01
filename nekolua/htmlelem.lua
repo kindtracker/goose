@@ -263,6 +263,142 @@ local LuaToJavascriptTagNameTable = {
 	Blockquote = "blockquote",
 }
 
+local LuaToJavascriptEventNameTable = {
+	Clicked = "click",
+	DoubleClicked = "dblclick",
+	MouseDown = "mousedown",
+	MouseUp = "mouseup",
+	MouseMoved = "mousemove",
+	MouseEntered = "mouseenter",
+	MouseLeft = "mouseleave",
+	MouseWheel = "wheel",
+
+	Touched = "pointerdown",
+	TouchEnded = "pointerup",
+	TouchMoved = "pointermove",
+	TouchEntered = "pointerenter",
+	TouchLeft = "pointerleave",
+
+	KeyDown = "keydown",
+	KeyUp = "keyup",
+
+	Focused = "focus",
+	FocusLost = "blur",
+
+	TextChanged = "input",
+	Changed = "change",
+	Submitted = "submit",
+	Selected = "select",
+
+	Copied = "copy",
+	Cut = "cut",
+	Pasted = "paste",
+
+	DragStarted = "dragstart",
+	Dragging = "drag",
+	DragEntered = "dragenter",
+	DragLeft = "dragleave",
+	DragOver = "dragover",
+	Dropped = "drop",
+	DragEnded = "dragend",
+
+	Playing = "play",
+	Paused = "pause",
+	Ended = "ended",
+	TimeChanged = "timeupdate",
+	VolumeChanged = "volumechange",
+
+	AnimationStarted = "animationstart",
+	AnimationEnded = "animationend",
+	AnimationLooped = "animationiteration",
+
+	TransitionStarted = "transitionstart",
+	TransitionEnded = "transitionend",
+
+	Scrolled = "scroll",
+	ScrollEnded = "scrollend",
+
+	Loaded = "load",
+	Error = "error",
+	Aborted = "abort",
+
+	ContextMenuOpened = "contextmenu",
+}
+
+local LuaToJavascriptEventTable = {
+	Type = "type",
+	Target = "target",
+	CurrentTarget = "currentTarget",
+	TimeStamp = "timeStamp",
+	DefaultPrevented = "defaultPrevented",
+	Bubbles = "bubbles",
+	Cancelable = "cancelable",
+	IsTrusted = "isTrusted",
+
+	ClientX = "clientX",
+	ClientY = "clientY",
+	PageX = "pageX",
+	PageY = "pageY",
+	ScreenX = "screenX",
+	ScreenY = "screenY",
+
+	OffsetX = "offsetX",
+	OffsetY = "offsetY",
+
+	Button = "button",
+	Buttons = "buttons",
+
+	MovementX = "movementX",
+	MovementY = "movementY",
+
+	Pressure = "pressure",
+	TiltX = "tiltX",
+	TiltY = "tiltY",
+	Twist = "twist",
+
+	PointerId = "pointerId",
+	PointerType = "pointerType",
+	IsPrimary = "isPrimary",
+
+	Width = "width",
+	Height = "height",
+
+	Key = "key",
+	Code = "code",
+	Location = "location",
+	Repeat = "repeat",
+	CtrlKey = "ctrlKey",
+	ShiftKey = "shiftKey",
+	AltKey = "altKey",
+	MetaKey = "metaKey",
+
+	DeltaX = "deltaX",
+	DeltaY = "deltaY",
+	DeltaZ = "deltaZ",
+	DeltaMode = "deltaMode",
+
+	Touches = "touches",
+	TargetTouches = "targetTouches",
+	ChangedTouches = "changedTouches",
+
+	Data = "data",
+	InputType = "inputType",
+
+	DataTransfer = "dataTransfer",
+
+	CompositionData = "data",
+
+	Duration = "duration",
+	CurrentTime = "currentTime",
+
+	Message = "message",
+	Filename = "filename",
+	Lineno = "lineno",
+	Colno = "colno",
+
+	ClipboardData = "clipboardData",
+}
+
 local CompiledGetStringOrNumberOrBooleanProperty = Neko:LoadString(GetElementJavascriptFunction .. [=[
 	const Element = GetElement(Arguments[0])
 	return JSON.stringify(Element[Arguments[1]])
@@ -355,7 +491,10 @@ function Module.new()
 			Instance.Style = Instance.Style or Lunar.Instance.new("HtmlStyle")
 			CompiledSetStyleElement(Instance.UniqueId, Instance.Style.UniqueId)
 
-			Instance.Clicked = Event.new(Instance, "Clicked", "click")
+			for LuaEventName, JavascriptEventName in pairs(LuaToJavascriptEventNameTable) do
+				Instance[LuaEventName] =
+					Event.new(Instance, LuaEventName, JavascriptEventName, LuaToJavascriptEventTable)
+			end
 		elseif Key == "Parent" then
 			CompiledAppendChild(Instance.UniqueId, NewValue.UniqueId)
 		end
