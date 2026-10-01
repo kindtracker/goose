@@ -11,6 +11,10 @@ function GetElement(UniqueId) {
     return document.body
   } else if (Element?.tagName == "HEAD") {
     return document.head
+  } else if (Element?.tagName == "HTML") {
+    return document.documentElement
+  } else if (Element?.tagName == "DOCUMENT") {
+    return document
   }
   return Element
 }
@@ -190,6 +194,7 @@ local LuaToJavascriptTagNameTable = {
 	Html = "html",
 	Head = "head",
 	Body = "body",
+	Document = "document",
 
 	Title = "title",
 	Base = "base",

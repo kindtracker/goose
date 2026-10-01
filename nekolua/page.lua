@@ -106,13 +106,19 @@ end
 function Page:InitPlugin()
 	local BodyElement = Instance.new("HtmlElement")
 	BodyElement.TagName = "Body"
-
 	Page.Body = BodyElement
 
 	local HeadElement = Instance.new("HtmlElement")
 	HeadElement.TagName = "Head"
-
 	Page.Head = HeadElement
+
+	local HtmlElement = Instance.new("HtmlElement")
+	HtmlElement.TagName = "Html"
+	Page.Html = HtmlElement
+
+	local DocumentElement = Instance.new("HtmlElement")
+	DocumentElement.TagName = "Document"
+	Page.Document = DocumentElement
 
 	Page.Location = JSONService:Decode(Neko:LoadString([=[
 			return JSON.stringify({

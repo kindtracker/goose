@@ -12,6 +12,10 @@ function GetElement(UniqueId) {
     return document.body
   } else if (Element?.tagName == "HEAD") {
     return document.head
+  } else if (Element?.tagName == "HTML") {
+    return document.documentElement
+  } else if (Element?.tagName == "DOCUMENT") {
+    return document
   }
   return Element
 }
@@ -114,6 +118,10 @@ function EventModule:ProcessEvents()
 
 		for LuaProperty, JavascriptProperty in pairs(Element.LuaToJavascriptEventTable) do
 			Arguments[LuaProperty] = EventArguments[JavascriptProperty]
+		end
+
+		if Element.Instance.TagName == "Document" then
+			Neko.Page.MousePosition = Vector2.new(Arguments.ClientX, Arguments.ClientY)
 		end
 
 		Element.Instance[EventName]:Fire(Arguments)

@@ -100,14 +100,12 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
-Oneko.Element.Clicked:Connect(function(Event)
-	print("meow meow", Event.ClientX, Event.ClientY)
-end)
-
 while true do
 	local Position = Oneko.Position
 	Position.X = Position.X + 0.1
 	Position.Y = Position.Y + 0.1
+
+	print(Page.MousePosition)
 
 	Oneko.Element.Style.Left = Position.X .. "px"
 	Oneko.Element.Style.Top = Position.Y .. "px"
