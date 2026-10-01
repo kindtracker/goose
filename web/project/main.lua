@@ -8,6 +8,9 @@ local Oneko = {
 	Position = Vector2.new(0, 0),
 	Speed = 10,
 	FrameCount = 0,
+	IdleTime = 0,
+	IdleFrameCount = 0,
+	IdleAnimation = nil,
 
 	TileMap = {
 		Idle = {
@@ -95,9 +98,10 @@ local Oneko = {
 	},
 }
 
-local function SetSprite(SpriteName)
+local function SetSprite(SpriteName, Divide)
+	Divide = Divide or 1
 	local SpriteFrames = Oneko.TileMap[SpriteName]
-	local SpritePosition = SpriteFrames[(Oneko.FrameCount % #SpriteFrames) + 1]
+	local SpritePosition = SpriteFrames[(math.floor(Oneko.FrameCount / Divide) % #SpriteFrames) + 1]
 	Oneko.Element.Style.BackgroundPosition = SpritePosition.X * 32 .. "px " .. SpritePosition.Y * 32 .. "px"
 end
 
@@ -108,6 +112,41 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
+function Idle(Oneko)
+	Oneko.IdleTime = Oneko.IdleTime + 1
+
+	if not Oneko.IdleAnimation and math.random(1, 75) == 1 then
+		local AvailableIdleAnimations = {
+			"Sleeping",
+			"ScratchSelf",
+		}
+
+		Oneko.IdleAnimation = AvailableIdleAnimations[math.random(1, #AvailableIdleAnimations)]
+		Oneko.IdleTime = 0
+	end
+	if not Oneko.IdleAnimation then
+		SetSprite("Idle")
+	end
+
+	if Oneko.IdleAnimation == "Sleeping" then
+		if Oneko.IdleTime < 8 * 3 then
+			SetSprite("Tired")
+		else
+			SetSprite("Sleeping", 3)
+		end
+		if Oneko.IdleTime > 8 * 24 then
+			Oneko.IdleAnimation = nil
+			Oneko.IdleTime = 0
+		end
+	elseif Oneko.IdleAnimation == "ScratchSelf" then
+		SetSprite("ScratchSelf", 1.5)
+		if Oneko.IdleTime > 12 then
+			Oneko.IdleAnimation = nil
+			Oneko.IdleTime = 0
+		end
+	end
+end
+
 Task:Spawn(function()
 	while true do
 		local Position = Oneko.Position
@@ -117,7 +156,10 @@ Task:Spawn(function()
 			local Difference = Position - Target
 			local Distance = math.sqrt(Difference.X ^ 2 + Difference.Y ^ 2)
 
-			if Distance > Oneko.Speed then
+			if Distance > Oneko.Speed or Distance > 48 then
+				Oneko.IdleTime = 0
+				Oneko.IdleAnimation = nil
+
 				Position = Position - (Difference / Distance * Oneko.Speed)
 				Oneko.Position = Position
 
@@ -139,6 +181,8 @@ Task:Spawn(function()
 
 				Oneko.Element.Style.Left = Position.X .. "px"
 				Oneko.Element.Style.Top = Position.Y .. "px"
+			else
+				Idle(Oneko)
 			end
 		end
 
