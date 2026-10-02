@@ -3,6 +3,7 @@ web/nekol/wneko.wasm
 web/nekol/wneko.wasm.js
 web/nekol/packages.js
 web/nekol/vendors
+web/nekol/*.json
 web/lunar
 web/luasocket
 web/luamimetypes
