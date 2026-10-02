@@ -122,12 +122,11 @@ function Idle(Oneko)
 		}
 
 		Oneko.IdleAnimation = AvailableIdleAnimations[math.random(1, #AvailableIdleAnimations)]
-		print(Page.Size.Y, Oneko.Position.Y)
 
-		if Oneko.Position.X < 16 then
+		if Oneko.Position.X < 16 * 3 then
 			Oneko.IdleAnimation = "ScratchWallW"
 			Oneko.Position.X = 0
-		elseif Oneko.Position.Y < 16 then
+		elseif Oneko.Position.Y < 16 * 3 then
 			Oneko.IdleAnimation = "ScratchWallN"
 			Oneko.Position.Y = 0
 		elseif Oneko.Position.X > Page.Size.X - 16 * 3 then
@@ -145,7 +144,6 @@ function Idle(Oneko)
 		return
 	end
 
-	print(type(Oneko.IdleAnimation), Oneko.IdleAnimation)
 	if Oneko.IdleAnimation == "Sleeping" then
 		if Oneko.IdleTime < 8 * 2 then
 			SetSprite("Tired")
@@ -179,14 +177,17 @@ Task:Spawn(function()
 		local Target = Page.MousePosition
 
 		if Target ~= nil then
+			Target = Target - Vector2.new(16, 16)
 			local Difference = Position - Target
 			local Distance = math.sqrt(Difference.X ^ 2 + Difference.Y ^ 2)
 
-			if Distance > Oneko.Speed or Distance > 48 then
+			if Distance > 42 then
 				Oneko.IdleTime = 0
 				Oneko.IdleAnimation = nil
 
 				Position = Position - (Difference / Distance * Oneko.Speed)
+				Position.X = math.max(math.min(Position.X, Page.Size.X - 32), 0)
+				Position.Y = math.max(math.min(Position.Y, Page.Size.Y - 32), 0)
 				Oneko.Position = Position
 
 				local Direction = ""
