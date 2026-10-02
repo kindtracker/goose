@@ -115,21 +115,39 @@ Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 function Idle(Oneko)
 	Oneko.IdleTime = Oneko.IdleTime + 1
 
-	if not Oneko.IdleAnimation and math.random(1, 75) == 1 then
+	if not Oneko.IdleAnimation and math.random(1, 25) == 1 then
 		local AvailableIdleAnimations = {
 			"Sleeping",
 			"ScratchSelf",
 		}
 
 		Oneko.IdleAnimation = AvailableIdleAnimations[math.random(1, #AvailableIdleAnimations)]
+		print(Page.Size.Y, Oneko.Position.Y)
+
+		if Oneko.Position.X < 16 then
+			Oneko.IdleAnimation = "ScratchWallW"
+			Oneko.Position.X = 0
+		elseif Oneko.Position.Y < 16 then
+			Oneko.IdleAnimation = "ScratchWallN"
+			Oneko.Position.Y = 0
+		elseif Oneko.Position.X > Page.Size.X - 16 * 3 then
+			Oneko.IdleAnimation = "ScratchWallE"
+			Oneko.Position.X = Page.Size.X - 16
+		elseif Oneko.Position.Y > Page.Size.Y - 16 * 3 then
+			Oneko.IdleAnimation = "ScratchWallS"
+			Oneko.Position.Y = Page.Size.Y - 16
+		end
+
 		Oneko.IdleTime = 0
 	end
 	if not Oneko.IdleAnimation then
 		SetSprite("Idle")
+		return
 	end
 
+	print(type(Oneko.IdleAnimation), Oneko.IdleAnimation)
 	if Oneko.IdleAnimation == "Sleeping" then
-		if Oneko.IdleTime < 8 * 3 then
+		if Oneko.IdleTime < 8 * 2 then
 			SetSprite("Tired")
 		else
 			SetSprite("Sleeping", 3)
@@ -139,11 +157,19 @@ function Idle(Oneko)
 			Oneko.IdleTime = 0
 		end
 	elseif Oneko.IdleAnimation == "ScratchSelf" then
-		SetSprite("ScratchSelf", 1.5)
-		if Oneko.IdleTime > 12 then
+		if Oneko.IdleTime > 8 * 4 then
 			Oneko.IdleAnimation = nil
 			Oneko.IdleTime = 0
+			return
 		end
+		SetSprite("ScratchSelf", 1.5)
+	elseif Oneko.IdleAnimation:find("Scratch") then
+		if Oneko.IdleTime > 8 * 6 then
+			Oneko.IdleAnimation = nil
+			Oneko.IdleTime = 0
+			return
+		end
+		SetSprite(Oneko.IdleAnimation, 2)
 	end
 end
 

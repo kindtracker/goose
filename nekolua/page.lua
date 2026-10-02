@@ -7,6 +7,13 @@ local CompiledGetPageTitle = Neko:LoadString([=[
 	return document.title
 ]=])
 
+local CompiledGetPageSize = Neko:LoadString([=[
+  return JSON.stringify({
+    X: window.innerWidth,
+    Y: window.innerHeight,
+  })
+]=])
+
 local CompiledSetPageTitle = Neko:LoadStringVoid([=[
 	document.title = Arguments[0]
 ]=])
@@ -29,6 +36,10 @@ local PageProxy = setmetatable({}, {
 	__index = function(_, Key)
 		if Key == "Title" then
 			return CompiledGetPageTitle()
+		elseif Key == "Size" then
+			local Value = CompiledGetPageSize()
+			local SizeJson = JSONService:Decode(Value)
+			return Vector2.new(SizeJson.X, SizeJson.Y)
 		end
 
 		return Page[Key]

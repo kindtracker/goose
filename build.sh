@@ -2,7 +2,7 @@
 set -e
 
 CFlags="-O3"
-LDFlags="-sWASM=2"
+LDFlags="-sWASM=2 -sASSERTIONS=1"
 Jobs="$(nproc)"
 
 rm -rf build
@@ -85,6 +85,7 @@ emcc $CFlags $LDFlags \
   build/luafilesystem/*.o \
   -sEXPORTED_FUNCTIONS=_Main \
   -sASYNCIFY=1 \
+  -sALLOW_MEMORY_GROWTH=1 \
   -o web/nekol/wneko.js
 
 lua bundle.lua
