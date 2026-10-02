@@ -4,19 +4,18 @@ const PackagesToInstallTree = `lunar/vendors/url.lua
 
 async function GetContent(Url, Text) {
   const Response = await fetch(Url);
-  if (!Response.ok) throw new Error(`Failed to fetch ${Url}: ${Response.status}`);
+  if (!Response.ok)
+    throw new Error(`Failed to fetch ${Url}: ${Response.status}`);
   return Text ? await Response.text() : await Response.json();
 }
 
-window.addEventListener("NekoLuaLoaded", () => {
-});
+window.addEventListener("NekoLuaLoaded", () => {});
 
 window.Module = {
   onRuntimeInitialized: async () => {
-    const Config = await GetContent("/project/config.json");
-    for (const FilePath of Config.Files) {
-      const FileContent = await GetContent("/project/" + FilePath, true);
-      FS.writeFile("/" + FilePath, FileContent);
+    const Bundle = await GetContent("/nekol/project.json");
+    for (const [FilePath, FileContent] of Object.entries(Bundle)) {
+      FS.writeFile(FilePath, FileContent);
     }
 
     FS.mkdirTree("/nekolib");
@@ -30,5 +29,5 @@ window.Module = {
 
     console.log("[Neko] Initialized");
     Module._Main();
-  }
+  },
 };

@@ -315,8 +315,6 @@ local Output = assert(io.open("web/nekol/packages.js", "w"))
 Output:write("window.NekoPackages = {\n")
 
 for FilePath, Package in pairs(Packages) do
-	print(string.format("  GEN  %s", FilePath))
-
 	local File = assert(io.open(Package.Source, "rb"), "Could not open " .. Package.Source)
 	local FileContent = File:read("*a")
 	File:close()
