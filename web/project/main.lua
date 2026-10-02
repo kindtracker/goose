@@ -117,7 +117,7 @@ Oneko.Element.MouseDown:Connect(function(Element)
 	Oneko.Dragging = true
 end)
 
-Oneko.Element.MouseUp:Connect(function(Element)
+Page.Document.MouseUp:Connect(function(Element)
 	Oneko.Dragging = false
 end)
 
