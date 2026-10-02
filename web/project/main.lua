@@ -7,6 +7,7 @@ Page.Title = "Neko"
 local Oneko = {
 	Position = Vector2.new(0, 0),
 	Speed = 10,
+	Dragging = false,
 	FrameCount = 0,
 	IdleTime = 0,
 	IdleFrameCount = 0,
@@ -112,6 +113,14 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
+Oneko.Element.MouseDown:Connect(function(Element)
+	Oneko.Dragging = true
+end)
+
+Oneko.Element.MouseUp:Connect(function(Element)
+	Oneko.Dragging = false
+end)
+
 function Idle(Oneko)
 	Oneko.IdleTime = Oneko.IdleTime + 1
 
@@ -176,7 +185,16 @@ Task:Spawn(function()
 		local Position = Oneko.Position
 		local Target = Page.MousePosition
 
-		if Target ~= nil then
+		if Oneko.Dragging then
+			Oneko.Position = Target - Vector2.new(16, 16)
+			Oneko.IdleAnimation = nil
+			Oneko.IdleTime = 0
+			Target = Oneko.Position
+
+			SetSprite("Idle")
+			Oneko.Element.Style.Left = Target.X .. "px"
+			Oneko.Element.Style.Top = Target.Y .. "px"
+		elseif Target ~= nil then
 			Target = Target - Vector2.new(16, 16)
 			local Difference = Position - Target
 			local Distance = math.sqrt(Difference.X ^ 2 + Difference.Y ^ 2)
@@ -215,7 +233,11 @@ Task:Spawn(function()
 
 		Oneko.FrameCount = Oneko.FrameCount + 1
 
-		Task.wait(0.1)
+		if not Oneko.Dragging then
+			Task.wait(0.1)
+		else
+			Task.wait(0)
+		end
 	end
 end)
 
