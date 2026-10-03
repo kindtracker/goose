@@ -11,6 +11,7 @@ Neko:LoadStringVoid([=[
 PluginService:LoadLuaPlugin("CoreNekoStyle", Base .. "/style.lua")
 PluginService:LoadLuaPlugin("CoreNekoHtmlElement", Base .. "/htmlelem.lua")
 PluginService:LoadLuaPlugin("CoreNekoPage", Base .. "/page.lua")
+PluginService:LoadLuaPlugin("CoreNekoBrowser", Base .. "/browser.lua")
 Neko.ProcessEvents = EventModule.ProcessEvents
 
 Neko:LoadStringVoid([=[
