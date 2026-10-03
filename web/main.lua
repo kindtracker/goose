@@ -1,5 +1,4 @@
 local Lunar = require("lunar")
-local Task = Lunar:GetService("TaskService")
 local Page = Neko.Page
 
 Page.Title = "Neko"
@@ -246,8 +245,4 @@ Task:Spawn(function()
 	end
 end)
 
-while true do
-	Task:Step()
-	Neko:Yield()
-	Neko:ProcessEvents()
-end
+Task:Run()
