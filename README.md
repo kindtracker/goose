@@ -78,6 +78,354 @@ The generated browser runtime will be placed in `web/nekol` or `public/nekol`.
 
 The Neko cheatsheet has not been created yet.
 
+```lua
+Neko:LoadString()      -- Compile JavaScript to a function. JavaScript can only return a string.
+Neko:LoadStringVoid()  -- Compile JavaScript to a function. JavaScript cannot return a value.
+Neko:ProcessEvents()   -- Process pending events.
+
+Neko.Page
+
+Page.Title             -- Get/set the document title.
+Page.Size              -- Get the page viewport size as Vector2.
+Page.Body              -- The <body> element.
+Page.Head              -- The <head> element.
+Page.Html              -- The <html> element.
+Page.Document          -- The document element.
+Page.Location          -- Current page location information.
+
+Page.new(TagName, Parent) -- Create a new HtmlElement.
+
+Page:SetTitle(Title) -- Set the document title.
+Page:QuerySelector(Selector) -- Get the first element matching a CSS selector.
+Page:QuerySelectorAll(Selector) -- Get all elements matching a CSS selector.
+Page:GetElementById(Id) -- Get an element by ID.
+Page:GetElementsByClassName(ClassName) -- Get all elements with a class.
+Page:GetElementsByTagName(TagName) -- Get all elements with a tag name.
+
+-- Properties
+HtmlElement.InnerHtml
+HtmlElement.OuterHtml
+HtmlElement.TextContent
+HtmlElement.InnerText
+
+HtmlElement.Id
+HtmlElement.ClassName
+HtmlElement.Title
+HtmlElement.Language
+HtmlElement.Direction
+HtmlElement.Slot
+
+HtmlElement.Href
+HtmlElement.Target
+HtmlElement.Download
+HtmlElement.Relation
+
+HtmlElement.Source
+HtmlElement.Alternative
+
+HtmlElement.Value
+HtmlElement.Name
+HtmlElement.Type
+HtmlElement.Placeholder
+
+HtmlElement.Role
+HtmlElement.Autocomplete
+
+HtmlElement.Width
+HtmlElement.Height
+
+HtmlElement.Min
+HtmlElement.Max
+HtmlElement.Step
+
+HtmlElement.Hidden
+HtmlElement.Disabled
+HtmlElement.Required
+HtmlElement.ReadOnly
+HtmlElement.Checked
+HtmlElement.Selected
+HtmlElement.Multiple
+HtmlElement.Autofocus
+
+-- Relationships
+HtmlElement.Parent
+HtmlElement.ParentElement
+HtmlElement.OffsetParent
+
+HtmlElement.FirstElementChild
+HtmlElement.LastElementChild
+HtmlElement.PreviousElementSibling
+HtmlElement.NextElementSibling
+
+HtmlElement.FirstChild
+HtmlElement.LastChild
+HtmlElement.PreviousSibling
+HtmlElement.NextSibling
+
+HtmlElement.OwnerDocument
+
+HtmlElement.Form
+HtmlElement.Labels
+
+HtmlElement.Select
+HtmlElement.SelectedOptions
+
+-- Layout
+HtmlElement.ClientWidth
+HtmlElement.ClientHeight
+HtmlElement.ClientLeft
+HtmlElement.ClientTop
+
+HtmlElement.OffsetWidth
+HtmlElement.OffsetHeight
+HtmlElement.OffsetLeft
+HtmlElement.OffsetTop
+
+HtmlElement.ScrollWidth
+HtmlElement.ScrollHeight
+HtmlElement.ScrollLeft
+HtmlElement.ScrollTop
+
+-- Events
+HtmlElement.Clicked
+HtmlElement.DoubleClicked
+
+HtmlElement.MouseDown
+HtmlElement.MouseUp
+HtmlElement.MouseMoved
+HtmlElement.MouseEntered
+HtmlElement.MouseLeft
+HtmlElement.MouseWheel
+
+HtmlElement.Touched
+HtmlElement.TouchEnded
+HtmlElement.TouchMoved
+HtmlElement.TouchEntered
+HtmlElement.TouchLeft
+
+HtmlElement.KeyDown
+HtmlElement.KeyUp
+
+HtmlElement.Focused
+HtmlElement.FocusLost
+
+HtmlElement.TextChanged
+HtmlElement.Changed
+HtmlElement.Submitted
+HtmlElement.Selected
+
+HtmlElement.Copied
+HtmlElement.Cut
+HtmlElement.Pasted
+
+HtmlElement.DragStarted
+HtmlElement.Dragging
+HtmlElement.DragEntered
+HtmlElement.DragLeft
+HtmlElement.DragOver
+HtmlElement.Dropped
+HtmlElement.DragEnded
+
+HtmlElement.Playing
+HtmlElement.Paused
+HtmlElement.Ended
+HtmlElement.TimeChanged
+HtmlElement.VolumeChanged
+
+HtmlElement.AnimationStarted
+HtmlElement.AnimationEnded
+HtmlElement.AnimationLooped
+
+HtmlElement.TransitionStarted
+HtmlElement.TransitionEnded
+
+HtmlElement.Scrolled
+HtmlElement.ScrollEnded
+
+HtmlElement.Loaded
+HtmlElement.Error
+HtmlElement.Aborted
+
+HtmlElement.ContextMenuOpened
+
+-- All style properties use PascalCase in Lua and are converted to camelCase for JavaScript.
+
+HtmlStyle.Display
+HtmlStyle.Position
+HtmlStyle.Top
+HtmlStyle.Right
+HtmlStyle.Bottom
+HtmlStyle.Left
+
+HtmlStyle.Width
+HtmlStyle.Height
+HtmlStyle.MinWidth
+HtmlStyle.MinHeight
+HtmlStyle.MaxWidth
+HtmlStyle.MaxHeight
+
+HtmlStyle.Margin
+HtmlStyle.MarginTop
+HtmlStyle.MarginRight
+HtmlStyle.MarginBottom
+HtmlStyle.MarginLeft
+
+HtmlStyle.Padding
+HtmlStyle.PaddingTop
+HtmlStyle.PaddingRight
+HtmlStyle.PaddingBottom
+HtmlStyle.PaddingLeft
+
+HtmlStyle.Border
+HtmlStyle.BorderWidth
+HtmlStyle.BorderStyle
+HtmlStyle.BorderColor
+HtmlStyle.BorderRadius
+
+HtmlStyle.Background
+HtmlStyle.BackgroundColor
+HtmlStyle.BackgroundImage
+HtmlStyle.BackgroundSize
+HtmlStyle.BackgroundPosition
+HtmlStyle.BackgroundRepeat
+
+HtmlStyle.Color
+HtmlStyle.Opacity
+HtmlStyle.Visibility
+
+HtmlStyle.Font
+HtmlStyle.FontFamily
+HtmlStyle.FontSize
+HtmlStyle.FontWeight
+HtmlStyle.FontStyle
+
+HtmlStyle.TextAlign
+HtmlStyle.TextDecoration
+HtmlStyle.TextTransform
+HtmlStyle.TextOverflow
+HtmlStyle.WhiteSpace
+HtmlStyle.LineHeight
+HtmlStyle.LetterSpacing
+
+HtmlStyle.Flex
+HtmlStyle.FlexDirection
+HtmlStyle.FlexWrap
+HtmlStyle.JustifyContent
+HtmlStyle.AlignItems
+HtmlStyle.AlignContent
+HtmlStyle.AlignSelf
+HtmlStyle.Gap
+
+HtmlStyle.Grid
+HtmlStyle.GridTemplateColumns
+HtmlStyle.GridTemplateRows
+HtmlStyle.GridColumn
+HtmlStyle.GridRow
+HtmlStyle.GridGap
+
+HtmlStyle.Overflow
+HtmlStyle.OverflowX
+HtmlStyle.OverflowY
+
+HtmlStyle.Cursor
+HtmlStyle.PointerEvents
+HtmlStyle.UserSelect
+
+HtmlStyle.ZIndex
+
+HtmlStyle.Transform
+HtmlStyle.TransformOrigin
+HtmlStyle.Transition
+
+HtmlStyle.Animation
+HtmlStyle.AnimationName
+HtmlStyle.AnimationDuration
+HtmlStyle.AnimationTimingFunction
+HtmlStyle.AnimationDelay
+HtmlStyle.AnimationIterationCount
+HtmlStyle.AnimationDirection
+HtmlStyle.AnimationFillMode
+HtmlStyle.AnimationPlayState
+
+-- Properties
+Event.Type
+Event.Target
+Event.CurrentTarget
+
+Event.TimeStamp
+Event.DefaultPrevented
+Event.Bubbles
+Event.Cancelable
+Event.IsTrusted
+
+-- Mouse
+Event.ClientX
+Event.ClientY
+Event.PageX
+Event.PageY
+Event.ScreenX
+Event.ScreenY
+Event.OffsetX
+Event.OffsetY
+
+Event.Button
+Event.Buttons
+
+Event.MovementX
+Event.MovementY
+
+Event.Pressure
+Event.TiltX
+Event.TiltY
+Event.Twist
+
+Event.PointerId
+Event.PointerType
+Event.IsPrimary
+
+Event.Width
+Event.Height
+
+-- Keyboard
+Event.Key
+Event.Code
+Event.Location
+Event.Repeat
+Event.CtrlKey
+Event.ShiftKey
+Event.AltKey
+Event.MetaKey
+
+-- Wheel
+Event.DeltaX
+Event.DeltaY
+Event.DeltaZ
+Event.DeltaMode
+
+-- Touch
+Event.Touches
+Event.TargetTouches
+Event.ChangedTouches
+
+-- Input
+Event.Data
+Event.InputType
+
+-- Drag & clipboard
+Event.DataTransfer
+Event.ClipboardData
+
+-- Media
+Event.Duration
+Event.CurrentTime
+
+-- Error
+Event.Message
+Event.Filename
+Event.Lineno
+Event.Colno
+```
+
 ## License
 
 Neko is licensed under the GPL-3.0-or-later license.
