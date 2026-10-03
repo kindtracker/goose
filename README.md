@@ -82,6 +82,7 @@ Neko:LoadStringVoid()  -- Compile JavaScript to a function. JavaScript cannot re
 Neko:ProcessEvents()   -- Process pending events.
 
 Neko.Page
+Neko.Browser
 
 Page.Title             -- Get/set the document title.
 Page.Size              -- Get the page viewport size as Vector2.
@@ -99,6 +100,16 @@ Page:QuerySelectorAll(Selector) -- Get all elements matching a CSS selector.
 Page:GetElementById(Id) -- Get an element by ID.
 Page:GetElementsByClassName(ClassName) -- Get all elements with a class.
 Page:GetElementsByTagName(TagName) -- Get all elements with a tag name.
+
+Browser:Alert(Message)      -- Show a browser alert dialog.
+Browser:Confirm(Message)    -- Show a confirmation dialog. Returns a boolean.
+Browser:Prompt(Message)     -- Show a prompt dialog. Returns the entered string or nil.
+Browser:Open(Url)           -- Open a URL in a new browser window/tab.
+Browser:Reload()             -- Reload the current page.
+Browser:Back()               -- Navigate back in browser history.
+Browser:Forward()            -- Navigate forward in browser history.
+Browser:Focus()              -- Focus the browser window.
+Browser:Blur()               -- Remove focus from the browser window.
 
 -- Methods
 HtmlElement:Destroy()
