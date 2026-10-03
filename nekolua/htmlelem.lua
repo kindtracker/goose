@@ -457,6 +457,12 @@ local CompiledRemoveChild = Neko:LoadStringVoid(GetElementJavascriptFunction .. 
 	Element.parentNode.removeChild(Element)
 ]=])
 
+local CompiledCloneElement = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
+  const Element = GetElement(Arguments[0])
+  
+  Module.NekoElements.set(Arguments[1], Element.cloneNode(true))
+]=])
+
 function Module.new()
 	local self = {}
 
@@ -505,6 +511,14 @@ function Module.new()
 			for LuaEventName, JavascriptEventName in pairs(LuaToJavascriptEventNameTable) do
 				Instance[LuaEventName] =
 					Event.new(Instance, LuaEventName, JavascriptEventName, LuaToJavascriptEventTable)
+			end
+
+			local InstanceClone = Instance.Clone
+			Instance.Clone = function()
+				local Clone = InstanceClone(Instance)
+				Clone.TagName = Instance.TagName
+				CompiledCloneElement(Instance.UniqueId, Clone.UniqueId)
+				return Clone
 			end
 		elseif Key == "Parent" then
 			if NewValue == nil then

@@ -8,6 +8,7 @@ local Oneko = {
 	Position = Vector2.new(0, 0),
 	Speed = 10,
 	Dragging = false,
+	Offset = Vector2.new(0, 0),
 	FrameCount = 0,
 	IdleTime = 0,
 	IdleFrameCount = 0,
@@ -113,12 +114,15 @@ Oneko.Element.Style.Height = "32px"
 Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
-Oneko.Element.MouseDown:Connect(function(Element)
-	Oneko.Element:Destroy()
+Oneko.Element.MouseDown:Connect(function(Event)
 	Oneko.Dragging = true
+	Oneko.Offset = Vector2.new(Event.ClientX - Oneko.Position.X, Event.ClientY - Oneko.Position.Y)
+
+	local Clone = Oneko.Element:Clone()
+	Clone.Parent = Page.Body
 end)
 
-Page.Document.MouseUp:Connect(function(Element)
+Page.Document.MouseUp:Connect(function(Event)
 	Oneko.Dragging = false
 end)
 
@@ -187,7 +191,7 @@ Task:Spawn(function()
 		local Target = Page.MousePosition
 
 		if Oneko.Dragging then
-			Oneko.Position = Target - Vector2.new(16, 16)
+			Oneko.Position = Target - Oneko.Offset
 			Oneko.IdleAnimation = nil
 			Oneko.IdleTime = 0
 			Target = Oneko.Position

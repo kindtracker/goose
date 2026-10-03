@@ -100,6 +100,10 @@ Page:GetElementById(Id) -- Get an element by ID.
 Page:GetElementsByClassName(ClassName) -- Get all elements with a class.
 Page:GetElementsByTagName(TagName) -- Get all elements with a tag name.
 
+-- Methods
+HtmlElement:Destroy()
+HtmlElement:Clone()
+
 -- Properties
 HtmlElement.InnerHtml
 HtmlElement.OuterHtml
