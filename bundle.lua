@@ -315,6 +315,11 @@ local Packages = {
 		Source = "nekolua/task.lua",
 		Install = "/nekolib/task.lua",
 	},
+
+	["nekolib/localstorage.lua"] = {
+		Source = "nekolua/localstorage.lua",
+		Install = "/nekolib/localstorage.lua",
+	},
 }
 
 local function Escape(String)
