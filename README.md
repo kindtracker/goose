@@ -76,8 +76,6 @@ The generated browser runtime will be placed in `web/nekol` or `public/nekol`.
 
 ## Cheatsheet
 
-The Neko cheatsheet has not been created yet.
-
 ```lua
 Neko:LoadString()      -- Compile JavaScript to a function. JavaScript can only return a string.
 Neko:LoadStringVoid()  -- Compile JavaScript to a function. JavaScript cannot return a value.
@@ -187,6 +185,12 @@ HtmlElement.ScrollLeft
 HtmlElement.ScrollTop
 
 -- Events
+
+-- Example:
+HtmlElement.Clicked:Connect(function(Event))
+  print(Event.ClientX)
+end
+
 HtmlElement.Clicked
 HtmlElement.DoubleClicked
 
