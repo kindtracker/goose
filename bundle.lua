@@ -310,6 +310,11 @@ local Packages = {
 		Source = "nekolua/browser.lua",
 		Install = "/nekolib/browser.lua",
 	},
+
+	["nekolib/task.lua"] = {
+		Source = "nekolua/task.lua",
+		Install = "/nekolib/task.lua",
+	},
 }
 
 local function Escape(String)
