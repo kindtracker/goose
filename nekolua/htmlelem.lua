@@ -451,6 +451,12 @@ local CompiledAppendChild = Neko:LoadStringVoid(GetElementJavascriptFunction .. 
 	Parent.appendChild(Element)
 ]=])
 
+local CompiledRemoveChild = Neko:LoadStringVoid(GetElementJavascriptFunction .. [=[
+	const Element = GetElement(Arguments[0])
+
+	Element.parentNode.removeChild(Element)
+]=])
+
 function Module.new()
 	local self = {}
 
@@ -501,7 +507,11 @@ function Module.new()
 					Event.new(Instance, LuaEventName, JavascriptEventName, LuaToJavascriptEventTable)
 			end
 		elseif Key == "Parent" then
-			CompiledAppendChild(Instance.UniqueId, NewValue.UniqueId)
+			if NewValue == nil then
+				CompiledRemoveChild(Instance.UniqueId)
+			else
+				CompiledAppendChild(Instance.UniqueId, NewValue.UniqueId)
+			end
 		end
 	end
 

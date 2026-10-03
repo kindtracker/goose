@@ -114,6 +114,7 @@ Oneko.Element.Style.ImageRendering = "pixelated"
 Oneko.Element.Style.BackgroundImage = 'url("/oneko.gif")'
 
 Oneko.Element.MouseDown:Connect(function(Element)
+	Oneko.Element:Destroy()
 	Oneko.Dragging = true
 end)
 
