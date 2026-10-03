@@ -12,6 +12,22 @@ local CompiledRunWindowFunction = Neko:LoadStringVoid([=[
   return Result.toString()
 ]=])
 
+local CompiledReload = Neko:LoadStringVoid([=[
+  window.location.reload()
+]=])
+
+local CompiledBack = Neko:LoadStringVoid([=[
+  history.back()
+]=])
+
+local CompiledForward = Neko:LoadStringVoid([=[
+  history.forward()
+]=])
+
+local CompiledBlur = Neko:LoadStringVoid([=[
+  window.blur()
+]=])
+
 function Browser:Alert(Message)
 	CompiledRunWindowFunctionVoid("alert", tostring(Message))
 end
@@ -28,6 +44,26 @@ end
 
 function Browser:Open(Url)
 	CompiledRunWindowFunctionVoid("open", tostring(Url))
+end
+
+function Browser:Reload()
+	CompiledReload()
+end
+
+function Browser:Back()
+	CompiledBack()
+end
+
+function Browser:Forward()
+	CompiledForward()
+end
+
+function Browser:Focus()
+	CompiledRunWindowFunctionVoid("focus")
+end
+
+function Browser:Blur()
+	CompiledBlur()
 end
 
 function Browser:InitPlugin()
